@@ -5,8 +5,6 @@
 #include <vector>
 #include <fstream>
 
-#include <boost/range/join.hpp>
-
 #include <nlohmann/json.hpp>
 
 #include <dlib/bayes_utils.h>

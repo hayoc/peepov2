@@ -3,7 +3,6 @@
 
 #include <random>
 
-#include <boost/range/join.hpp>
 #include <range/v3/view.hpp>
 
 using nlohmann::json;
