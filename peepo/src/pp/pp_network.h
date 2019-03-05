@@ -40,15 +40,15 @@ private:
 	std::vector<std::vector<std::string>> edges;
 	nlohmann::json cpds;
 
-	std::map<std::string, unsigned int>  node_map;
-	std::map<std::string, unsigned int> card_map;
+	std::map<std::string, unsigned>  node_map;
+	std::map<std::string, unsigned> card_map;
 	std::map<std::string, std::vector<double>>  omega_map;
 
 	directed_graph<bayes_node>::kernel_1a_c bn;
 
 	//------------- FUNCTIONS --------------------
 
-	void add_node_to_maps(nlohmann::json&, unsigned int&, const std::string&);
+	void add_node_to_maps(nlohmann::json&, unsigned&, const std::string&);
 	void make_omega_map();
 
 public:
