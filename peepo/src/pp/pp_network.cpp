@@ -28,7 +28,7 @@ void PPNetwork::from_json(const json& jzon)
 	edges = jzon["edges"].get<std::vector<std::vector<std::string>>>();
 	cpds = jzon["cpds"].get<json>();
 
-	unsigned int index{};
+	unsigned index{};
 	for (json node : ron) { add_node_to_maps(node, index, "RON"); }
 	for (json node : ext) { add_node_to_maps(node, index, "EXT"); }
 	for (json node : pro) { add_node_to_maps(node, index, "PRO"); }
@@ -79,18 +79,18 @@ directed_graph<bayes_node>::kernel_1a_c& PPNetwork::to_bayesian_network(void)
 	// Root nodes
 	for (std::string node : root_nodes)
 	{
-		unsigned int card = card_map[node];
+		unsigned card = card_map[node];
 		unsigned long num = node_map[node];
 
 		std::vector<double> probs = cpds[node];
 
 		parent_state.clear();
-		for (unsigned int state = 0; state < card; state++) { set_node_probability(bn, num, state, parent_state, probs[state]); }
+		for (unsigned state = 0; state < card; state++) { set_node_probability(bn, num, state, parent_state, probs[state]); }
 	}
 	// Leaf nodes
 	for (std::string leaf : get_leaf_nodes())
 	{
-		unsigned int card = card_map[leaf];
+		unsigned card = card_map[leaf];
 		unsigned long num = node_map[leaf];
 
 		parent_state.clear();
@@ -102,7 +102,7 @@ directed_graph<bayes_node>::kernel_1a_c& PPNetwork::to_bayesian_network(void)
 			parents_card.push_back(card_map[parent]);
 			parent_state.add(node_map[parent], 1);
 		}
-		std::vector<std::vector<unsigned int>> parents_states_matrix = States::get_index_matrix(parents_card);
+		std::vector<std::vector<unsigned>> parents_states_matrix = States::get_index_matrix(parents_card);
 		for (unsigned states = 0; states < parents_states_matrix[0].size(); states++) {
 			for (unsigned parent = 0; parent < parents_states_matrix.size(); parent++) {
 				parent_state[node_map[parents[parent]]] = parents_states_matrix[parent][states];
@@ -142,10 +142,10 @@ std::map<std::string, matrix<double>> PPNetwork::do_inference(std::map<std::stri
 }
 
 
-void PPNetwork::add_node_to_maps(json& node, unsigned int& index, const std::string& type)
+void PPNetwork::add_node_to_maps(json& node, unsigned& index, const std::string& type)
 {
 	std::string name = node["name"];
-	unsigned int card = node["card"];
+	unsigned card = node["card"];
 
 	node_map[name] = index;
 	card_map[name] = card;
@@ -162,7 +162,7 @@ void PPNetwork::make_omega_map(void)
 	for (auto& entry : card_map)
 	{
 		std::string node = entry.first;
-		unsigned int card = entry.second;
+		unsigned card = entry.second;
 
 		double max_omega = 2.0f * 3.141596f;
 		for (std::string parent : get_parents(node)) { max_omega *= card_map[parent]; }
