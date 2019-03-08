@@ -42,8 +42,6 @@ private:
 	std::map<std::string, unsigned> card_map;
 	std::map<std::string, std::vector<double>>  omega_map;
 
-	directed_graph<bayes_node>::kernel_1a_c bn;
-
 	//------------- FUNCTIONS --------------------
 
 	void add_node_to_maps(nlohmann::json&, unsigned&, const std::string&);
@@ -52,17 +50,26 @@ private:
 public:
 	PPNetwork();
 
+	directed_graph<bayes_node>::kernel_1a_c bn;
+
 	void from_json(const nlohmann::json&);
 	nlohmann::json to_json();
 	void from_file(std::ifstream&);
 	void to_file(std::ofstream&);
-	directed_graph<bayes_node>::kernel_1a_c& to_bayesian_network();
-	std::map<std::string, matrix<double>> do_inference(std::map<std::string, unsigned>& evidence);
+	void to_bayesian_network();
+	std::map<std::string, std::vector<double>> do_inference(std::map<std::string, unsigned>& evidence);
 
 	std::vector<std::string> get_nodes();
 	std::vector<std::string> get_root_nodes();
 	std::vector<std::string> get_leaf_nodes();
+	std::vector<std::string> get_pro_nodes();
 	std::vector<std::string> get_parents(std::string&);
+
+	std::map<std::string, unsigned>  get_root_values(void);
+	bool is_leaf(const std::string&);
+
+	void add_cpd(const std::string&, const std::vector<double>);
+	void add_cpd(const std::string&, const std::vector<std::vector<double>>);
 
 };
 

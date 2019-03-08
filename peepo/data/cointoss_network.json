@@ -1,0 +1,46 @@
+{
+  "header": {
+    "identification": "Cointoss",
+    "description": "Network for a cointoss",
+    "frozen": false,
+    "train_from": "",
+    "date": "2019-02-06 12:51:41.233943"
+  },
+  "nodes": {
+    "RON": [
+      {
+        "name": "previous",
+        "card": 2
+      }
+    ],
+    "EXT": [
+      {
+        "name": "current",
+        "card": 2
+      }
+    ],
+    "PRO": []
+  },
+  "edges": [
+    [
+      "previous",
+      "current"
+    ]
+  ],
+  "cpds": {
+    "previous": [
+      0.9,
+      0.1
+    ],
+    "current": [
+      [
+        0.01,
+        0.99
+      ],
+      [
+        0.99,
+        0.01
+      ]
+    ]
+  }
+}

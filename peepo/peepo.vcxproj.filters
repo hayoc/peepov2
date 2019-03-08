@@ -21,10 +21,26 @@
     <ClInclude Include="src\pp\utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\pp\generative_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pp\sensory_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pp\pp_network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\pp\generative_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\cointoss\cointoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\cointoss_network.json" />
+    <None Include="data\survival_network.json" />
   </ItemGroup>
 </Project>

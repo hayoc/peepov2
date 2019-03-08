@@ -65,7 +65,7 @@ void PPNetwork::to_file(std::ofstream& ofs)
 	ofs << json_string;
 }
 
-directed_graph<bayes_node>::kernel_1a_c& PPNetwork::to_bayesian_network(void)
+void PPNetwork::to_bayesian_network(void)
 {
 	bn.set_number_of_nodes(node_map.size());
 
@@ -97,7 +97,7 @@ directed_graph<bayes_node>::kernel_1a_c& PPNetwork::to_bayesian_network(void)
 		std::vector<std::string> parents = get_parents(leaf);
 		std::vector<unsigned> parents_card;
 		for (std::string parent : parents)
-		{ 
+		{
 			parents_card.push_back(card_map[parent]);
 			parent_state.add(node_map[parent], 1);
 		}
@@ -111,13 +111,11 @@ directed_graph<bayes_node>::kernel_1a_c& PPNetwork::to_bayesian_network(void)
 			}
 		}
 	}
-
-	return bn;
 }
 
-std::map<std::string, matrix<double>> PPNetwork::do_inference(std::map<std::string, unsigned>& evidence)
+std::map<std::string, std::vector<double>> PPNetwork::do_inference(std::map<std::string, unsigned>& evidence)
 {
-	std::map<std::string, matrix<double>> inference;
+	std::map<std::string, std::vector<double>> inference;
 
 	for (auto& entry : evidence)
 	{
@@ -132,9 +130,14 @@ std::map<std::string, matrix<double>> PPNetwork::do_inference(std::map<std::stri
 
 	for (std::string node : get_nodes())
 	{
-		unsigned num = node_map[node];
-		matrix<double> prob = solution.probability(num);
-		inference[node] = prob;
+		if (evidence.find(node) == evidence.end())
+		{
+			unsigned num = node_map[node];
+			matrix<double> prob = solution.probability(num);
+			std::vector<double> result;
+			for (auto p : prob) { result.push_back(p); }
+			inference[node] = result;
+		}
 	}
 
 	return inference;
@@ -189,9 +192,47 @@ std::vector<std::string> PPNetwork::get_leaf_nodes(void)
 	return ranges::view::concat(ext_nodes, pro_nodes);
 }
 
+std::vector<std::string> PPNetwork::get_pro_nodes(void)
+{
+	return pro_nodes;
+}
+
 std::vector<std::string> PPNetwork::get_parents(std::string& node)
 {
 	std::vector<std::string> parents;
 	for (std::vector<std::string> edge : edges) { if (edge[1] == node) { parents.push_back(edge[0]); } }
 	return parents;
+}
+
+std::map<std::string, unsigned> PPNetwork::get_root_values(void)
+{
+	std::map<std::string, unsigned> root_values;
+	for (std::string root : get_root_nodes())
+	{
+		std::vector<double> cpd = cpds[root];
+		root_values[root] = std::distance(cpd.begin(), std::max_element(cpd.begin(), cpd.end()));
+	}
+	return root_values;
+}
+
+bool PPNetwork::is_leaf(const std::string& node)
+{
+	for (std::string leaf : get_leaf_nodes())
+	{
+		if (leaf == node)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void PPNetwork::add_cpd(const std::string& node, const std::vector<double> cpd)
+{
+	cpds.update({ { node, cpd } });
+}
+
+void PPNetwork::add_cpd(const std::string& node, const std::vector<std::vector<double>> cpd)
+{
+	cpds.update({ { node, cpd } });
 }
