@@ -1,0 +1,4 @@
+namespace Cointoss
+{
+	int run();
+}

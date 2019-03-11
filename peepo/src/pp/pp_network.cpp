@@ -71,6 +71,11 @@ void PPNetwork::to_bayesian_network(void)
 
 	// Add edges
 	for (std::vector<std::string> edge : edges) { bn.add_edge(node_map[edge[0]], node_map[edge[1]]); }
+	if (!graph_is_connected(bn)) { 
+		std::cout << "Error: graph is not connected." << std::endl;
+		std::cin.get();
+	}
+
 	// Set node cardinalities
 	for (auto& entry : card_map) { set_node_num_values(bn, node_map[entry.first], entry.second); }
 	//Set Conditional Probabilities
@@ -113,7 +118,28 @@ void PPNetwork::to_bayesian_network(void)
 	}
 }
 
-std::map<std::string, std::vector<double>> PPNetwork::do_inference(std::map<std::string, unsigned>& evidence)
+std::map<std::string, std::vector<double>> PPNetwork::do_inference(std::vector<std::string>& inferred)
+{
+	std::map<std::string, std::vector<double>> inference;
+
+	join_tree_type join_tree;
+	create_moral_graph(bn, join_tree);
+	create_join_tree(join_tree, join_tree);
+	bayesian_network_join_tree solution(bn, join_tree);
+
+	for (std::string node : inferred)
+	{
+		unsigned num = node_map[node];
+		matrix<double> prob = solution.probability(num);
+		std::vector<double> result;
+		for (auto p : prob) { result.push_back(p); }
+		inference[node] = result;
+	}
+
+	return inference;
+}
+
+std::map<std::string, std::vector<double>> PPNetwork::do_inference(std::map<std::string, unsigned>& evidence, std::vector<std::string>& inferred)
 {
 	std::map<std::string, std::vector<double>> inference;
 
@@ -128,16 +154,18 @@ std::map<std::string, std::vector<double>> PPNetwork::do_inference(std::map<std:
 	create_join_tree(join_tree, join_tree);
 	bayesian_network_join_tree solution(bn, join_tree);
 
-	for (std::string node : get_nodes())
+	for (auto& entry : evidence)
 	{
-		if (evidence.find(node) == evidence.end())
-		{
-			unsigned num = node_map[node];
-			matrix<double> prob = solution.probability(num);
-			std::vector<double> result;
-			for (auto p : prob) { result.push_back(p); }
-			inference[node] = result;
-		}
+		set_node_as_nonevidence(bn, node_map[entry.first]);
+	}
+
+	for (std::string node : inferred)
+	{
+		unsigned num = node_map[node];
+		matrix<double> prob = solution.probability(num);
+		std::vector<double> result;
+		for (auto p : prob) { result.push_back(p); }
+		inference[node] = result;
 	}
 
 	return inference;

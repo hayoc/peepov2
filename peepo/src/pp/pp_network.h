@@ -57,7 +57,8 @@ public:
 	void from_file(std::ifstream&);
 	void to_file(std::ofstream&);
 	void to_bayesian_network();
-	std::map<std::string, std::vector<double>> do_inference(std::map<std::string, unsigned>& evidence);
+	std::map<std::string, std::vector<double>> do_inference(std::vector<std::string>& inferred);
+	std::map<std::string, std::vector<double>> do_inference(std::map<std::string, unsigned>& evidence, std::vector<std::string>& inferred);
 
 	std::vector<std::string> get_nodes();
 	std::vector<std::string> get_root_nodes();

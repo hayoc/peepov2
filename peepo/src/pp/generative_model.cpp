@@ -1,10 +1,8 @@
 #include "generative_model.h"
-#include <functional>
 
-GenerativeModel::GenerativeModel(PPNetwork& pp_network_, SensoryInput& sensory_input_):
+GenerativeModel::GenerativeModel(PPNetwork& pp_network_, Peepo& peepo_):
 	pp_network(pp_network_),
-	sensory_input(sensory_input_),
-	bayesian_network(pp_network.bn)
+	peepo(peepo_)
 {
 	pp_network.to_bayesian_network();
 }
@@ -19,7 +17,7 @@ double GenerativeModel::process(void)
 		if (pp_network.is_leaf(node))
 		{
 			std::vector<double> prediction = entry.second;
-			std::vector<double> observation = sensory_input.observation(node);
+			std::vector<double> observation = peepo.observation(node);
 			std::vector<double> prediction_error = calculate_error(prediction, observation);
 			double prediction_error_size = calculate_error_size(prediction, observation);
 			total_prediction_error_size += prediction_error_size;
@@ -34,8 +32,8 @@ double GenerativeModel::process(void)
 
 std::map<std::string, std::vector<double>> GenerativeModel::predict(void)
 {
-	std::map<std::string, unsigned> evidence = pp_network.get_root_values();
-	return pp_network.do_inference(evidence);
+	std::vector<std::string> inferred = pp_network.get_leaf_nodes();
+	return pp_network.do_inference(inferred);
 }
 
 std::vector<double> GenerativeModel::calculate_error(const std::vector<double>& pred, const std::vector<double>& obs)
@@ -74,7 +72,7 @@ void GenerativeModel::hypothesis_update(const std::string& node_name, const std:
 	std::vector<std::string> pro_nodes = pp_network.get_pro_nodes();
 	if (std::find(pro_nodes.begin(), pro_nodes.end(), node_name) != pro_nodes.end())
 	{
-		sensory_input.action(node_name, prediction);
+		peepo.action(node_name, prediction);
 	}
 	else
 	{
@@ -82,7 +80,8 @@ void GenerativeModel::hypothesis_update(const std::string& node_name, const std:
 		std::transform(sum.begin(), sum.end(), prediction.begin(), sum.begin(), std::plus<double>());
 
 		std::map<std::string, unsigned> evidence = { {node_name, std::distance(sum.begin(), std::max_element(sum.begin(), sum.end())) } };
-		std::map<std::string, std::vector<double>> inference = pp_network.do_inference(evidence);
+		std::vector<std::string> inferred = pp_network.get_root_nodes();
+		std::map<std::string, std::vector<double>> inference = pp_network.do_inference(evidence, inferred);
 		for (auto& entry : inference)
 		{
 			pp_network.add_cpd(entry.first, entry.second);

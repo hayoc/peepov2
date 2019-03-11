@@ -120,14 +120,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\pp\generative_model.h" />
+    <ClInclude Include="src\pp\peepo.h" />
     <ClInclude Include="src\pp\pp_network.h" />
-    <ClInclude Include="src\pp\sensory_input.h" />
     <ClInclude Include="src\pp\utilities.h" />
+    <ClInclude Include="src\sandbox\cointoss\cointoss.h" />
+    <ClInclude Include="src\sandbox\common\vision.h" />
+    <ClInclude Include="src\sandbox\survival\organism.h" />
+    <ClInclude Include="src\sandbox\survival\survival.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pp\generative_model.cpp" />
     <ClCompile Include="src\pp\pp_network.cpp" />
     <ClCompile Include="src\sandbox\cointoss\cointoss.cpp" />
+    <ClCompile Include="src\sandbox\main.cpp" />
+    <ClCompile Include="src\sandbox\survival\organism.cpp" />
+    <ClCompile Include="src\sandbox\survival\survival.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\cointoss_network.json" />

@@ -24,7 +24,19 @@
     <ClInclude Include="src\pp\generative_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\pp\sensory_input.h">
+    <ClInclude Include="src\sandbox\cointoss\cointoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox\survival\survival.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox\survival\organism.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox\common\vision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pp\peepo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,6 +48,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\sandbox\cointoss\cointoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\survival\survival.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\survival\organism.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
