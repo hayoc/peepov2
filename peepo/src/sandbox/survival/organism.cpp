@@ -13,12 +13,8 @@ SurvivalPeepo::SurvivalPeepo(std::string name_, bool graphical_, std::vector<dou
 {
 	motor[LEFT] = false;
 	motor[RIGHT] = false;
-	view["1"] = false;
-	view["2"] = false;
-	view["3"] = false;
-	view["4"] = false;
-	view["5"] = false;
-	view["6"] = false;
+	view["left"] = false;
+	view["right"] = false;
 	for (double angle = -30.0; angle < 30.0; angle += 10.0) {
 		sectors.push_back({ angle*PI / 180., (angle + 10.0)*PI / 180.0 });
 	}
@@ -69,13 +65,13 @@ void SurvivalPeepo::update()
 	pos[0] += std::cos(rotation) * PEEPO_SPEED;
 	pos[1] += std::sin(rotation) * PEEPO_SPEED;
 	if (motor[LEFT]) {
-		rotation -= 10. / 180.*PI;
+		rotation -= 2. / 180.*PI;
 		if (rotation < 0.0) {
 			rotation = 2.0*PI;//??  ??????
 		}
 	}
 	if (motor[RIGHT]) {
-		rotation += 10. / 180.*PI;
+		rotation += 2. / 180.*PI;
 		if (rotation > 2.0*PI) {
 			rotation = 0.0;
 		}
@@ -148,11 +144,16 @@ void SurvivalPeepo::calculate_obstacles()
 			count++;
 		}
 	}
-
-	std::string only_true = std::to_string(relevant_sector.index);
-	if (only_true != "0") {
-		view[only_true] = true;
+	if ((relevant_sector.index == 4) || (relevant_sector.index == 5) || (relevant_sector.index == 6))
+	{
+		view["right"] = true;
 	}
+	else if ((relevant_sector.index == 1) || (relevant_sector.index == 2) || (relevant_sector.index == 3))
+	{
+		view["left"] = true;
+	}
+	std::string only_true = std::to_string(relevant_sector.index);
+
 	double sight_angle = 0.0;
 	if (only_true == "0") { sight_angle = rotation; }
 	if (only_true == "1") { sight_angle = rotation - 25.0 / 180.0*PI; }
@@ -170,7 +171,7 @@ std::string SurvivalPeepo::get_direction(const std::string& name)
 	std::string direction;
 	for (auto dir : { LEFT, RIGHT })
 	{
-		if (name.find(dir)) { direction = dir; break; }
+		if (name.find(dir) != std::string::npos) { direction = dir; break; }
 	}
 	return direction;
 }
@@ -178,10 +179,10 @@ std::string SurvivalPeepo::get_direction(const std::string& name)
 std::string SurvivalPeepo::get_quadrant(const std::string& name)
 {
 	std::string quad = "0";
-	std::vector<std::string> quadrants = { "1","2","3","4","5","6" };
+	std::vector<std::string> quadrants = { "left","right"};
 	for (auto qd : quadrants)
 	{
-		if (name.find(qd)) { quad = qd; break; }
+		if (name.find(qd) != std::string::npos) { quad = qd; break; }
 	}
 	return quad;
 }

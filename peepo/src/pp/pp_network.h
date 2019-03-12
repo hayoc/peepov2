@@ -69,6 +69,7 @@ public:
 	std::map<std::string, unsigned>  get_root_values(void);
 	bool is_leaf(const std::string&);
 
+	std::vector<double> get_cpd(const std::string&);
 	void add_cpd(const std::string&, const std::vector<double>);
 	void add_cpd(const std::string&, const std::vector<std::vector<double>>);
 

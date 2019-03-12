@@ -255,6 +255,12 @@ bool PPNetwork::is_leaf(const std::string& node)
 	return false;
 }
 
+std::vector<double> PPNetwork::get_cpd(const std::string& node)
+{
+	std::vector<double> cpd = cpds[node];
+	return cpd;
+}
+
 void PPNetwork::add_cpd(const std::string& node, const std::vector<double> cpd)
 {
 	cpds.update({ { node, cpd } });

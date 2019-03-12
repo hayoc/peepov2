@@ -18,11 +18,13 @@ double GenerativeModel::process(void)
 		{
 			std::vector<double> prediction = entry.second;
 			std::vector<double> observation = peepo.observation(node);
+
 			std::vector<double> prediction_error = calculate_error(prediction, observation);
 			double prediction_error_size = calculate_error_size(prediction, observation);
 			total_prediction_error_size += prediction_error_size;
 			if (prediction_error_size > 0.1) //TODO: Arbitrary
 			{
+				//std::cout << "Prediction for node: " << node << " = [" << prediction[0] << ", " << prediction[1] << "] VS Observation = [" << observation[0] << ", " << observation[1] <<  std::endl;
 				error_minimization(node, prediction_error, prediction);
 			}
 		}
@@ -84,6 +86,9 @@ void GenerativeModel::hypothesis_update(const std::string& node_name, const std:
 		std::map<std::string, std::vector<double>> inference = pp_network.do_inference(evidence, inferred);
 		for (auto& entry : inference)
 		{
+			//std::string oldname = entry.first;
+			//std::vector<double> old = pp_network.get_cpd(oldname);
+			//std::cout << "Hypo Update " << oldname << "  FROM [" << old[0] << ", " << old[1] << "] TO [" << entry.second[0] << ", " << entry.second[1] << "]" << std::endl;
 			pp_network.add_cpd(entry.first, entry.second);
 		}
 		pp_network.to_bayesian_network();

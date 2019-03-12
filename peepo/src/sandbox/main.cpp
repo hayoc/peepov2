@@ -18,7 +18,7 @@ int main()
 //int main()
 //{
 //	PPNetwork pp;
-//	std::ifstream ifs("data/cointoss_network.json");
+//	std::ifstream ifs("data/survival_network.json");
 //	pp.from_file(ifs);
 //	std::vector<Obstacle> obstacles;
 //	std::vector<double> pos = { WIN_SIZE / 2, WIN_SIZE / 2 };
@@ -26,20 +26,35 @@ int main()
 //
 //	GenerativeModel gen_model{ pp, peepo };
 //
-//	std::map<std::string, unsigned> evidence;
-//	evidence["current"] = 1;
-//	std::vector<std::string> inferred;
-//	inferred.push_back("previous");
-//	//inferred.push_back("root_right");
+//	std::vector<double> prediction = {0.82, 18};
+//	std::vector<double> prediction_error = {-0.72, 0.72};
 //
-//	std::vector<double> prediction = {0.01, 0.99};
-//	std::vector<double> prediction_error = {0.98, -0.98};
+//	std::map<std::string, std::vector<double>> predictions = gen_model.predict();
 //
-//	gen_model.predict();
-//	gen_model.hypothesis_update("current", prediction_error, prediction);
-//	gen_model.predict();
-//	gen_model.hypothesis_update("current", prediction_error, prediction);
+//	for (auto& entry : predictions)
+//	{
+//		std::string node = entry.first;
+//		if (pp.is_leaf(node))
+//		{
+//			std::vector<double> prediction = entry.second;
+//			std::cout << "Prediction for node: " << node << " = [" << prediction[0] << ", " << prediction[1] << "]" << std::endl;
+//		}
+//	}
 //
+//	gen_model.hypothesis_update("LEN_vision_1", prediction_error, prediction);
+//
+//	std::map<std::string, std::vector<double>> predictions2 = gen_model.predict();
+//
+//	for (auto& entry : predictions2)
+//	{
+//		std::string node = entry.first;
+//		if (pp.is_leaf(node))
+//		{
+//			std::vector<double> prediction = entry.second;
+//			std::cout << "Prediction for node: " << node << " = [" << prediction[0] << ", " << prediction[1] << "]" << std::endl;
+//		}
+//	}
+//	std::cout << "ballz" << std::endl;
 //	std::cin.get();
 //}
 

@@ -164,7 +164,7 @@ namespace Survival
 		std::ifstream ifs("data/survival_network.json");
 		pp.from_file(ifs);
 
-		generate_obstacles(100, "data/survival_obstacles.json");
+		generate_obstacles(400, "data/survival_obstacles.json");
 
 		verification(true, pp, "data/survival_obstacles.json");
 

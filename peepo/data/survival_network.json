@@ -19,27 +19,11 @@
     ],
     "EXT": [
       {
-        "name": "LEN_vision_1",
+        "name": "LEN_vision_left",
         "card": 2
       },
       {
-        "name": "LEN_vision_2",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_3",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_4",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_5",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_6",
+        "name": "LEN_vision_right",
         "card": 2
       },
       {
@@ -61,15 +45,7 @@
   "edges": [
     [
       "root_left",
-      "LEN_vision_1"
-    ],
-    [
-      "root_left",
-      "LEN_vision_2"
-    ],
-    [
-      "root_left",
-      "LEN_vision_3"
+      "LEN_vision_left"
     ],
     [
       "root_left",
@@ -77,15 +53,7 @@
     ],
     [
       "root_right",
-      "LEN_vision_4"
-    ],
-    [
-      "root_right",
-      "LEN_vision_5"
-    ],
-    [
-      "root_right",
-      "LEN_vision_6"
+      "LEN_vision_right"
     ],
     [
       "root_right",
@@ -96,91 +64,51 @@
   ],
   "cpds": {
     "root_left": [
-      0.9,
-      0.1
+      0.99,
+      0.01
     ],
     "root_right": [
-      0.9,
-      0.1
+      0.99,
+      0.01
     ],
-    "LEN_vision_1": [
+    "LEN_vision_left": [
       [
-        0.9,
-        0.1
+        0.99,
+        0.01
       ],
       [
-        0.1,
-        0.9
+        0.01,
+        0.99
       ]
     ],
-    "LEN_vision_2": [
+    "LEN_vision_right": [
       [
-        0.9,
-        0.1
+        0.99,
+        0.01
       ],
       [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_3": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_4": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_5": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_6": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
+        0.01,
+        0.99
       ]
     ],
     "LEN_motor_left": [
       [
-        0.9,
-        0.1
+        0.99,
+        0.01
       ],
       [
-        0.1,
-        0.9
+        0.01,
+        0.99
       ]
     ],
     "LEN_motor_right": [
       [
-        0.9,
-        0.1
+        0.99,
+        0.01
       ],
       [
-        0.1,
-        0.9
+        0.01,
+        0.99
       ]
     ],
     "dummy": [
