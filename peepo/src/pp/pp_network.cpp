@@ -13,6 +13,37 @@ PPNetwork::PPNetwork()
 
 }
 
+PPNetwork::PPNetwork(const PPNetwork& pp)
+{
+	identification = pp.identification;
+	description = pp.description;
+	date = pp.date;
+	root_nodes = pp.root_nodes;
+	ext_nodes = pp.ext_nodes;
+	pro_nodes = pp.pro_nodes;
+	edges = pp.edges;
+	cpds = pp.cpds;
+	node_map = pp.node_map;
+	card_map = pp.card_map;
+	omega_map = pp.omega_map;
+}
+
+PPNetwork& PPNetwork::operator=(const PPNetwork& pp)
+{
+	identification = pp.identification;
+	description = pp.description;
+	date = pp.date;
+	root_nodes = pp.root_nodes;
+	ext_nodes = pp.ext_nodes;
+	pro_nodes = pp.pro_nodes;
+	edges = pp.edges;
+	cpds = pp.cpds;
+	node_map = pp.node_map;
+	card_map = pp.card_map;
+	omega_map = pp.omega_map;
+}
+
+
 void PPNetwork::from_json(const json& jzon)
 {
 	identification = jzon["header"]["identification"].get<std::string>();
@@ -100,13 +131,13 @@ void PPNetwork::to_bayesian_network(void)
 		parent_state.clear();
 		std::vector<std::vector<double>> probs = cpds[leaf];
 		std::vector<std::string> parents = get_parents(leaf);
-		std::vector<unsigned> parents_card;
+		std::vector<int> parents_card;
 		for (std::string parent : parents)
 		{
 			parents_card.push_back(card_map[parent]);
 			parent_state.add(node_map[parent], 1);
 		}
-		std::vector<std::vector<unsigned>> parents_states_matrix = States::get_index_matrix(parents_card);
+		std::vector<std::vector<int>> parents_states_matrix = States::get_index_matrix(parents_card);
 		for (unsigned states = 0; states < parents_states_matrix[0].size(); states++) {
 			for (unsigned parent = 0; parent < parents_states_matrix.size(); parent++) {
 				parent_state[node_map[parents[parent]]] = parents_states_matrix[parent][states];
@@ -220,9 +251,19 @@ std::vector<std::string> PPNetwork::get_leaf_nodes(void)
 	return ranges::view::concat(ext_nodes, pro_nodes);
 }
 
+std::vector<std::string> PPNetwork::get_ext_nodes(void)
+{
+	return ext_nodes;
+}
+
 std::vector<std::string> PPNetwork::get_pro_nodes(void)
 {
 	return pro_nodes;
+}
+
+std::vector<std::vector<std::string>> PPNetwork::get_edges()
+{
+	return edges;
 }
 
 std::vector<std::string> PPNetwork::get_parents(std::string& node)
@@ -230,6 +271,13 @@ std::vector<std::string> PPNetwork::get_parents(std::string& node)
 	std::vector<std::string> parents;
 	for (std::vector<std::string> edge : edges) { if (edge[1] == node) { parents.push_back(edge[0]); } }
 	return parents;
+}
+
+std::vector<std::string> PPNetwork::get_children(std::string& node)
+{
+	std::vector<std::string> children;
+	for (std::vector<std::string> edge : edges) { if (edge[0] == node) { children.push_back(edge[1]); } }
+	return children;
 }
 
 std::map<std::string, unsigned> PPNetwork::get_root_values(void)
@@ -243,6 +291,79 @@ std::map<std::string, unsigned> PPNetwork::get_root_values(void)
 	return root_values;
 }
 
+
+std::vector<double> PPNetwork::get_cpd(const std::string& node)
+{
+	std::vector<double> cpd = cpds[node];
+	return cpd;
+}
+
+unsigned PPNetwork::get_cardinality(const std::string& node)
+{
+	return card_map[node];
+}
+
+std::vector<double> PPNetwork::get_omega(const std::string& node)
+{
+	return omega_map[node];
+}
+
+void PPNetwork::add_root_node(const std::string node, unsigned cardinality)
+{
+	root_nodes.push_back(node);
+	card_map[node] = cardinality;
+}
+
+void PPNetwork::add_ext_node(const std::string node, unsigned cardinality)
+{
+	ext_nodes.push_back(node);
+	card_map[node] = cardinality;
+}
+
+void PPNetwork::add_pro_node(const std::string node, unsigned cardinality)
+{
+	pro_nodes.push_back(node);
+	card_map[node] = cardinality;
+}
+
+void PPNetwork::add_edge(const std::vector<std::string> edge)
+{
+	edges.push_back(edge);
+}
+
+void PPNetwork::add_cpd(const std::string node, const std::vector<double> cpd)
+{
+	cpds.update({ { node, cpd } });
+}
+
+void PPNetwork::add_cpd(const std::string node, const std::vector<std::vector<double>> cpd)
+{
+	cpds.update({ { node, cpd } });
+}
+
+void PPNetwork::add_omega(const std::string node, std::vector<double> omega)
+{
+	omega_map[node] = omega;
+}
+
+void PPNetwork::remove_root_node(const std::string node)
+{
+	root_nodes.erase(std::remove(root_nodes.begin(), root_nodes.end(), node), root_nodes.end());
+	card_map.erase(node);
+	node_map.erase(node);
+	omega_map.erase(node);
+}
+
+void PPNetwork::remove_edge(const std::vector<std::string> edge)
+{
+	edges.erase(std::remove(edges.begin(), edges.end(), edge), edges.end());
+}
+
+void PPNetwork::set_edges(std::vector<std::vector<std::string>> edges_)
+{
+	edges = edges_;
+}
+
 bool PPNetwork::is_leaf(const std::string& node)
 {
 	for (std::string leaf : get_leaf_nodes())
@@ -253,20 +374,4 @@ bool PPNetwork::is_leaf(const std::string& node)
 		}
 	}
 	return false;
-}
-
-std::vector<double> PPNetwork::get_cpd(const std::string& node)
-{
-	std::vector<double> cpd = cpds[node];
-	return cpd;
-}
-
-void PPNetwork::add_cpd(const std::string& node, const std::vector<double> cpd)
-{
-	cpds.update({ { node, cpd } });
-}
-
-void PPNetwork::add_cpd(const std::string& node, const std::vector<std::vector<double>> cpd)
-{
-	cpds.update({ { node, cpd } });
 }

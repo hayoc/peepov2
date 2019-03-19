@@ -121,16 +121,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\evolution\genetic_algorithm.h" />
     <ClInclude Include="src\pp\generative_model.h" />
     <ClInclude Include="src\pp\peepo.h" />
     <ClInclude Include="src\pp\pp_network.h" />
-    <ClInclude Include="src\pp\utilities.h" />
+    <ClInclude Include="src\utilities.h" />
     <ClInclude Include="src\sandbox\cointoss\cointoss.h" />
     <ClInclude Include="src\sandbox\common\vision.h" />
     <ClInclude Include="src\sandbox\survival\organism.h" />
     <ClInclude Include="src\sandbox\survival\survival.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\evolution\genetic_algorithm.cpp" />
     <ClCompile Include="src\pp\generative_model.cpp" />
     <ClCompile Include="src\pp\pp_network.cpp" />
     <ClCompile Include="src\sandbox\cointoss\cointoss.cpp" />

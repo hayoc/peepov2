@@ -49,6 +49,8 @@ private:
 
 public:
 	PPNetwork();
+	PPNetwork(const PPNetwork&);
+	PPNetwork& operator=(const PPNetwork&);
 
 	directed_graph<bayes_node>::kernel_1a_c bn;
 
@@ -60,18 +62,34 @@ public:
 	std::map<std::string, std::vector<double>> do_inference(std::vector<std::string>& inferred);
 	std::map<std::string, std::vector<double>> do_inference(std::map<std::string, unsigned>& evidence, std::vector<std::string>& inferred);
 
+
 	std::vector<std::string> get_nodes();
 	std::vector<std::string> get_root_nodes();
 	std::vector<std::string> get_leaf_nodes();
+	std::vector<std::string> get_ext_nodes();
 	std::vector<std::string> get_pro_nodes();
-	std::vector<std::string> get_parents(std::string&);
-
 	std::map<std::string, unsigned>  get_root_values(void);
-	bool is_leaf(const std::string&);
-
+	std::vector<std::vector<std::string>> get_edges();
+	std::vector<std::string> get_parents(std::string&);
+	std::vector<std::string> get_children(std::string&);
 	std::vector<double> get_cpd(const std::string&);
-	void add_cpd(const std::string&, const std::vector<double>);
-	void add_cpd(const std::string&, const std::vector<std::vector<double>>);
+	unsigned get_cardinality(const std::string&);
+	std::vector<double> get_omega(const std::string&);
+
+	void add_root_node(const std::string, unsigned);
+	void add_ext_node(const std::string, unsigned);
+	void add_pro_node(const std::string, unsigned);
+	void add_edge(const std::vector<std::string>);
+	void add_cpd(const std::string, const std::vector<double>);
+	void add_cpd(const std::string, const std::vector<std::vector<double>>);
+	void add_omega(const std::string, std::vector<double>);
+
+	void remove_root_node(const std::string);
+	void remove_edge(const std::vector<std::string>);
+
+	void set_edges(std::vector<std::vector<std::string>>);
+
+	bool is_leaf(const std::string&);
 
 };
 
