@@ -7,12 +7,11 @@
 
 #include "pp/pp_network.h"
 #include "pp/generative_model.h"
+#include "evolution/genetic_algorithm.h"
 #include "sandbox/survival/organism.h"
 #include "sandbox/survival/survival.h"
 
 using json = nlohmann::json;
-
-
 
 namespace Survival
 {
@@ -52,13 +51,12 @@ namespace Survival
 	class World
 	{
 	private:
-		bool graphical;
 		sf::RenderWindow& window;
 
 	public:
 
-		World(const bool& graphical_, sf::RenderWindow& window_) :
-			graphical(graphical_), window(window_)
+		World(sf::RenderWindow& window_) :
+			window(window_)
 		{
 
 		}
@@ -77,7 +75,7 @@ namespace Survival
 			peepo_.setOrigin(SIZE_PEEPO / 2, SIZE_PEEPO / 2);
 			peepo_.setPosition(pos[0], pos[1]);
 
-			SurvivalPeepo peepo{ "Bob", graphical, pos, obstacles, pp_network };
+			SurvivalPeepo peepo{ "Bob", pos, obstacles, pp_network };
 
 			while (window.isOpen())
 			{
@@ -146,27 +144,87 @@ namespace Survival
 		}
 	};
 
-	static void verification(const bool& graphical, PPNetwork& pp_network, const std::string& obstacles_path)
+	static std::vector<SurvivalPeepo> create_peepo_population(std::vector<Individual> population, const std::string& obstacles_path)
 	{
+		std::vector<SurvivalPeepo> peepos;
+		
+		std::vector<Obstacle> obstacles = read_obstacles(obstacles_path);
+		std::vector<double> pos = { WIN_SIZE / 2, WIN_SIZE / 2 };
+		
+		for (Individual individual : population)
+		{
+			SurvivalPeepo peepo{ "Bob", pos, obstacles, individual.pp_network };
+			peepos.push_back(peepo);
+		}
+
+		return peepos;
+	}
+
+	static void evolution(const std::string& obstacles_path)
+	{
+		unsigned max_age = 1000;
+		unsigned n_pop = 10;
+		unsigned n_gen = 10;
+
+		PPNetwork pp;
+		Individual individual{ pp };
+		
+		GeneticAlgorithm ga{ "data/survival_network.json", n_pop, 0.2, 0.2, individual };
+		std::vector<Individual> population = ga.first_generation();
+
+		std::vector<double> avg_fitnesses;
+		for (unsigned gen = 0; gen < n_gen; gen++)
+		{
+			std::vector<SurvivalPeepo> peepos = create_peepo_population(population, obstacles_path);
+
+			for (unsigned age = 0; age < max_age; age++)
+			{
+				for (SurvivalPeepo peepo : peepos)
+				{
+					peepo.update();
+				}
+			}
+
+			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health; }
+			avg_fitnesses.push_back(ga.avg_fitness);
+			population = ga.evolve(population);
+		}
+
+		Individual best_individual = ga.best_chromosome;
+		std::ofstream ofs("data/survival_network_evolved.json");
+		best_individual.pp_network.to_file(ofs);
+		std::cout << "Best fitness: " << best_individual.fitness << std::endl;
+
+		for (double avg_fit : avg_fitnesses)
+		{
+			std::cout << "Avg Fitness: " << avg_fit << std::endl;
+		}
+	}
+
+
+	static void verification(const std::string& obstacles_path)
+	{
+		PPNetwork pp_network;
+		std::ifstream ifs("data/survival_network_evolved.json");
+		pp_network.from_file(ifs);
+
 		unsigned max_age = 2000;
 		// Create the window of the application
 		sf::RenderWindow window(sf::VideoMode(WIN_SIZE, WIN_SIZE, 32), "Survival",
 			sf::Style::Titlebar | sf::Style::Default);
 		window.setVerticalSyncEnabled(false);
-		World world(graphical, window);
+		World world(window);
 		world.world_loop(max_age, pp_network, obstacles_path);
 		std::cin.get();
 	}
 
+
 	int run()
 	{
-		PPNetwork pp;
-		std::ifstream ifs("data/survival_network.json");
-		pp.from_file(ifs);
-
 		generate_obstacles(400, "data/survival_obstacles.json");
 
-		verification(true, pp, "data/survival_obstacles.json");
+		evolution("data/survival_obstacles.json");
+		//verification("data/survival_obstacles.json");
 
 		return 0;
 	}

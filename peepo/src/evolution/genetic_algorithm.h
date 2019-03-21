@@ -6,22 +6,6 @@
 
 using json = nlohmann::json;
 
-long long SEED = std::chrono::system_clock::now().time_since_epoch().count();
-
-struct	Agent
-{
-	Agent(void);
-	Agent(const Agent&);
-	Agent(const double&, const PPNetwork&, double = 0.0, double = 0.0);
-	Agent& operator=(const Agent&);
-	double fitness;
-	PPNetwork network;
-	double mut_top;
-	double mut_cpd;
-	bool operator<(const Agent&);
-	bool operator>(const Agent&);
-};
-
 struct Individual
 {
 	Individual(const Individual&);
@@ -61,25 +45,21 @@ private:
 	unsigned NUMBER_OF_MATING_PARENTS = 2;
 	unsigned CROSS_OVER_TRESHOLD = 3;
 	
-	long long seed;
 
 	const std::string& source;
-	bool fast;
 	unsigned n_pop;
 	double p_mut_top;
 	double p_mut_cpd;
-
-	Individual best_chromosome;
-
-	double avg_fitness = 0;
 
 	std::vector<Individual> get_selected_parents(std::vector<Individual>&, double);
 	std::vector<Individual> cross_over(std::vector<Individual>&);
 	std::vector<Individual> mutate(std::vector<Individual>&);
 
-
 public:
-	GeneticAlgorithm(const std::string& source_, bool fast_, unsigned  n_pop_, double p_mut_top_, double p_mut_cpd_, Individual dummy);
+	GeneticAlgorithm(const std::string& source_, unsigned  n_pop_, double p_mut_top_, double p_mut_cpd_, Individual dummy);
+	
+	Individual best_chromosome;
+	double avg_fitness = 0;
 	
 	std::vector<Individual> first_generation(void);
 	std::vector<Individual> evolve(std::vector<Individual>&);

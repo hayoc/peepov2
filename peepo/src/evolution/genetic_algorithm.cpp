@@ -28,6 +28,7 @@ Individual& Individual::operator=(const Individual& individual)
 	fitness = individual.fitness;
 	mut_top = individual.mut_top;
 	mut_cpd = individual.mut_cpd;
+	return *this;
 }
 
 std::vector<json> get_topologies(PPNetwork& peepo, unsigned npop)
@@ -40,8 +41,7 @@ std::vector<json> get_topologies(PPNetwork& peepo, unsigned npop)
 	map = ones_matrix<unsigned>(leaf_nodes.size(), root_nodes.size());
 	json a;
 
-	long long seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::default_random_engine dre(seed);
+	std::default_random_engine dre(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_real_distribution<double> di(0.0, 2.0*0.999999999999);//uniform distribution in interval [0,2)
 	int count = 0;
 	while (true) {
@@ -52,7 +52,7 @@ std::vector<json> get_topologies(PPNetwork& peepo, unsigned npop)
 		}
 		bool valid = valid_graph(map, root_nodes, leaf_nodes);
 		if (valid) {
-			a["egdes"] = adjency_to_edges(map, root_nodes, leaf_nodes);
+			a["edges"] = adjency_to_edges(map, root_nodes, leaf_nodes);
 			a["entropy"] = adjency_to_edges(map, root_nodes, leaf_nodes).size();
 			topologies.push_back(a);
 		}
@@ -66,16 +66,16 @@ std::vector<json> get_topologies(PPNetwork& peepo, unsigned npop)
 	std::random_shuffle(topologies.begin(), topologies.end());
 	topologies.resize(npop - 1);
 	map = ones_matrix<unsigned>(leaf_nodes.size(), root_nodes.size());//adding a fully connected network
-	a["egdes"] = adjency_to_edges(map, root_nodes, leaf_nodes);
+	a["edges"] = adjency_to_edges(map, root_nodes, leaf_nodes);
 	a["entropy"] = adjency_to_edges(map, root_nodes, leaf_nodes).size();
 	topologies.push_back(a);
 
 	return topologies;
 }
 
-std::vector<double> generate_rand_vec(unsigned dim, double coef)
+std::vector<double> generate_random_vector(unsigned dim, double coef)
 {
-	std::default_random_engine dre(SEED);
+	std::default_random_engine dre(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_real_distribution<double> di(0.0, coef);
 	std::vector<double> my_rand(dim);
 	std::generate(my_rand.begin(), my_rand.end(), [&] { return di(dre); });
@@ -382,14 +382,14 @@ void add_node(PPNetwork& pp)
 	pp.add_edge(edge);
 
 	std::vector<double> omega{ 0.0, 0.0 };
-	std::vector<double> cpd{ 0.5, 0.5 };
+	std::vector<double> parent_cpd{ 0.5, 0.5 };
 	pp.add_omega(new_parent, omega);
-	pp.add_cpd(new_parent, cpd);
+	pp.add_cpd(new_parent, parent_cpd);
 
 	std::vector<unsigned> parents_card;
 	for (std::string parent : pp.get_parents(child)) { parents_card.push_back(pp.get_cardinality(parent)); }
-	std::vector<std::vector<double>> cpd = ga_child_cpd(parents_card, pp.get_omega(child));
-	pp.add_cpd(child, cpd);
+	std::vector<std::vector<double>> child_cpd = ga_child_cpd(parents_card, pp.get_omega(child));
+	pp.add_cpd(child, child_cpd);
 }
 
 void remove_node(PPNetwork& pp)
@@ -421,20 +421,17 @@ void remove_node(PPNetwork& pp)
 
 GeneticAlgorithm::GeneticAlgorithm(
 	const std::string& source_,
-	bool fast_,
 	unsigned  n_pop_,
 	double p_mut_top_,
 	double p_mut_cpd_,
 	Individual dummy) :
 	source(source_),
-	fast(fast_),
 	n_pop(n_pop_),
 	p_mut_top(p_mut_top_),
 	p_mut_cpd(p_mut_cpd_),
 	best_chromosome(dummy)
 {
 	srand(time(NULL));
-	seed = std::chrono::system_clock::now().time_since_epoch().count();
 }
 
 std::vector<Individual> GeneticAlgorithm::first_generation(void)
@@ -443,9 +440,10 @@ std::vector<Individual> GeneticAlgorithm::first_generation(void)
 	std::ifstream ifs(source);
 	pp_template.from_file(ifs);
 
-	std::vector<Individual> population;
+	std::vector<Individual> population{};
 
-	for (json topology : get_topologies(pp_template, n_pop))
+	std::vector<json> topologies = get_topologies(pp_template, n_pop);
+	for (json topology : topologies)
 	{
 		std::vector<std::vector<std::string>> edges = topology["edges"];
 		pp_template.set_edges(edges);
@@ -472,7 +470,7 @@ std::vector<Individual> GeneticAlgorithm::first_generation(void)
 			else
 			{
 				std::vector<unsigned> parents_card;
-				unsigned product;
+				unsigned product = 1;
 				for (std::string parent : parents)
 				{
 					parents_card.push_back(pp.get_cardinality(parent));
@@ -486,7 +484,17 @@ std::vector<Individual> GeneticAlgorithm::first_generation(void)
 			}
 		}
 		Individual individual{ pp };
+		std::cout << individual.pp_network.identification << std::endl;
 		population.push_back(individual);
+		std::cout << population[population.size() - 1].pp_network.identification << std::endl;
+	}
+
+	std::cout << "WHAT IN ACTUAL FUCK" << std::endl;
+	std::cout << population.size() << std::endl;
+	for (Individual individual : population)
+	{
+		std::cout << "WTF" << std::endl;
+		std::cout << individual.pp_network.identification << std::endl;
 	}
 	return population;
 }
@@ -515,14 +523,14 @@ std::vector<Individual> GeneticAlgorithm::get_selected_parents(std::vector<Indiv
 	std::vector<Individual> selected_parents;
 
 	std::vector<unsigned> pool;
-	for (int index = 0; index < n_pop; index++) {
-		int repeat = n_pop - index;
-		for (int i = 0; i < repeat; i++) {
+	for (unsigned index = 0; index < n_pop; index++) {
+		unsigned repeat = n_pop - index;
+		for (unsigned i = 0; i < repeat; i++) {
 			pool.push_back(index);
 		}
 	}
 	std::random_shuffle(pool.begin(), pool.end());
-	for (int draw = 0; draw < NUMBER_OF_MATING_PARENTS; draw++) {
+	for (unsigned draw = 0; draw < NUMBER_OF_MATING_PARENTS; draw++) {
 		unsigned pool_index = std::rand() % (pool.size() - 1);
 		unsigned parent_index = pool[pool_index];
 
@@ -607,7 +615,7 @@ std::vector<Individual> GeneticAlgorithm::cross_over(std::vector<Individual>& se
 				else
 				{
 					std::vector<unsigned> parents_card;
-					unsigned product;
+					unsigned product = 1;
 					for (std::string parent : parents)
 					{
 						parents_card.push_back(pp.get_cardinality(parent));

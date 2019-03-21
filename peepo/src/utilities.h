@@ -144,6 +144,4 @@ Combinations<T>::comb(unsigned long long n, unsigned long long k) {
 }
 
 
-#endif // COMBINATIONS_H
-
 #endif

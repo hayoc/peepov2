@@ -57,9 +57,6 @@ private:
 	PPNetwork& pp_network;
 	GenerativeModel gen_model;
 
-	bool graphical;
-
-
 public:
 
 	std::vector<double> pos;
@@ -74,7 +71,7 @@ public:
 	std::map<std::string, bool> motor;
 	std::map<std::string, bool> view;
 
-	SurvivalPeepo(std::string, bool, std::vector<double>&, std::vector<Obstacle>&, PPNetwork&);
+	SurvivalPeepo(std::string, std::vector<double>&, std::vector<Obstacle>&, PPNetwork&);
 	
 	void action(const std::string&, const std::vector<double>&);
 	std::vector<double> observation(const std::string&);

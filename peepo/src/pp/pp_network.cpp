@@ -41,6 +41,7 @@ PPNetwork& PPNetwork::operator=(const PPNetwork& pp)
 	node_map = pp.node_map;
 	card_map = pp.card_map;
 	omega_map = pp.omega_map;
+	return *this;
 }
 
 
@@ -101,7 +102,10 @@ void PPNetwork::to_bayesian_network(void)
 	bn.set_number_of_nodes(node_map.size());
 
 	// Add edges
-	for (std::vector<std::string> edge : edges) { bn.add_edge(node_map[edge[0]], node_map[edge[1]]); }
+	for (std::vector<std::string> edge : edges) 
+	{ 
+		bn.add_edge(node_map[edge[0]], node_map[edge[1]]); 
+	}
 	if (!graph_is_connected(bn)) { 
 		std::cout << "Error: graph is not connected." << std::endl;
 		std::cin.get();

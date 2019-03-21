@@ -1,9 +1,8 @@
 #include "organism.h"
 
 
-SurvivalPeepo::SurvivalPeepo(std::string name_, bool graphical_, std::vector<double>& pos_, std::vector<Obstacle>& obstacles_, PPNetwork& pp_network_) :
+SurvivalPeepo::SurvivalPeepo(std::string name_, std::vector<double>& pos_, std::vector<Obstacle>& obstacles_, PPNetwork& pp_network_) :
 	name(name_),
-	graphical(graphical_),
 	pos(pos_),
 	obstacles(obstacles_),
 	pp_network(pp_network_),

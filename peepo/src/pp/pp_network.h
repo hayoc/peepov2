@@ -27,10 +27,6 @@ private:
 
 	//------------- MEMBERS ---------------------
 
-	std::string identification;
-	std::string description;
-	std::string date;
-
 	std::vector<std::string> root_nodes;
 	std::vector<std::string> ext_nodes;
 	std::vector<std::string> pro_nodes;
@@ -48,6 +44,10 @@ private:
 	void make_omega_map();
 
 public:
+	std::string identification;
+	std::string description;
+	std::string date;
+
 	PPNetwork();
 	PPNetwork(const PPNetwork&);
 	PPNetwork& operator=(const PPNetwork&);
