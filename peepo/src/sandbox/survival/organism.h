@@ -57,7 +57,6 @@ private:
 	GenerativeModel gen_model;
 
 public:
-	PPNetwork pp_network;
 
 	std::vector<double> pos;
 	std::vector<Obstacle> obstacles;

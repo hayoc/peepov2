@@ -179,11 +179,6 @@ namespace Survival
 		{
 			std::vector<SurvivalPeepo> peepos = create_peepo_population(population, obstacles_path);
 
-			for (SurvivalPeepo peepo : peepos)
-			{
-				std::cout << peepo.health << std::endl;
-			}
-
 			for (unsigned age = 0; age < max_age; age++)
 			{
 				for (SurvivalPeepo peepo : peepos)
