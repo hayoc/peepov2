@@ -151,9 +151,10 @@ namespace Survival
 		std::vector<Obstacle> obstacles = read_obstacles(obstacles_path);
 		std::vector<double> pos = { WIN_SIZE / 2, WIN_SIZE / 2 };
 		
-		for (Individual individual : population)
+		for (int i = 0; i < population.size(); i++)
 		{
-			SurvivalPeepo peepo{ "Bob", pos, obstacles, individual.pp_network };
+			std::string name = "Peepo_" + std::to_string(i);
+			SurvivalPeepo peepo{ name, pos, obstacles, population[i].pp_network };
 			peepos.push_back(peepo);
 		}
 
@@ -162,6 +163,7 @@ namespace Survival
 
 	static void evolution(const std::string& obstacles_path)
 	{
+		std::string source = "data/survival_network.json";
 		unsigned max_age = 1000;
 		unsigned n_pop = 10;
 		unsigned n_gen = 10;
@@ -169,13 +171,18 @@ namespace Survival
 		PPNetwork pp;
 		Individual individual{ pp };
 		
-		GeneticAlgorithm ga{ "data/survival_network.json", n_pop, 0.2, 0.2, individual };
+		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2, individual };
 		std::vector<Individual> population = ga.first_generation();
 
 		std::vector<double> avg_fitnesses;
 		for (unsigned gen = 0; gen < n_gen; gen++)
 		{
 			std::vector<SurvivalPeepo> peepos = create_peepo_population(population, obstacles_path);
+
+			for (SurvivalPeepo peepo : peepos)
+			{
+				std::cout << peepo.health << std::endl;
+			}
 
 			for (unsigned age = 0; age < max_age; age++)
 			{

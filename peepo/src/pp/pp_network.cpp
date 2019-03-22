@@ -13,19 +13,20 @@ PPNetwork::PPNetwork()
 
 }
 
-PPNetwork::PPNetwork(const PPNetwork& pp)
+PPNetwork::PPNetwork(const PPNetwork& pp) :
+	identification(pp.identification),
+	description(pp.description),
+	date(pp.date),
+	root_nodes(pp.root_nodes),
+	ext_nodes(pp.ext_nodes),
+	pro_nodes(pp.pro_nodes),
+	edges(pp.edges),
+	cpds(pp.cpds),
+	node_map(pp.node_map),
+	card_map(pp.card_map),
+	omega_map(pp.omega_map)
 {
-	identification = pp.identification;
-	description = pp.description;
-	date = pp.date;
-	root_nodes = pp.root_nodes;
-	ext_nodes = pp.ext_nodes;
-	pro_nodes = pp.pro_nodes;
-	edges = pp.edges;
-	cpds = pp.cpds;
-	node_map = pp.node_map;
-	card_map = pp.card_map;
-	omega_map = pp.omega_map;
+
 }
 
 PPNetwork& PPNetwork::operator=(const PPNetwork& pp)
@@ -99,7 +100,8 @@ void PPNetwork::to_file(std::ofstream& ofs)
 
 void PPNetwork::to_bayesian_network(void)
 {
-	bn.set_number_of_nodes(node_map.size());
+	int num = node_map.size();
+	bn.set_number_of_nodes(num);
 
 	// Add edges
 	for (std::vector<std::string> edge : edges) 

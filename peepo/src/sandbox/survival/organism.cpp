@@ -6,7 +6,7 @@ SurvivalPeepo::SurvivalPeepo(std::string name_, std::vector<double>& pos_, std::
 	pos(pos_),
 	obstacles(obstacles_),
 	pp_network(pp_network_),
-	gen_model(pp_network, *this),
+	gen_model(pp_network_, *this),
 	rotation(0.f),
 	health(0)
 {

@@ -7,7 +7,7 @@
 class GenerativeModel {
 
 private:
-	PPNetwork& pp_network;
+	PPNetwork pp_network;
 	Peepo& peepo;
 
 

@@ -54,10 +54,10 @@ private:
 	std::vector<std::vector<double>> sectors;
 	
 	std::string name;
-	PPNetwork& pp_network;
 	GenerativeModel gen_model;
 
 public:
+	PPNetwork pp_network;
 
 	std::vector<double> pos;
 	std::vector<Obstacle> obstacles;

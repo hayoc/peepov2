@@ -12,7 +12,7 @@ struct Individual
 	Individual(PPNetwork& pp_network_, double = 0.0, double = 0.0, double = 0.0);
 	Individual& operator=(const Individual&);
 
-	PPNetwork& pp_network;
+	PPNetwork pp_network;
 	double fitness;
 	double mut_top;
 	double mut_cpd;

@@ -436,11 +436,11 @@ GeneticAlgorithm::GeneticAlgorithm(
 
 std::vector<Individual> GeneticAlgorithm::first_generation(void)
 {
+	std::vector<Individual> population;
+
 	PPNetwork pp_template;
 	std::ifstream ifs(source);
 	pp_template.from_file(ifs);
-
-	std::vector<Individual> population{};
 
 	std::vector<json> topologies = get_topologies(pp_template, n_pop);
 	for (json topology : topologies)
@@ -484,18 +484,9 @@ std::vector<Individual> GeneticAlgorithm::first_generation(void)
 			}
 		}
 		Individual individual{ pp };
-		std::cout << individual.pp_network.identification << std::endl;
 		population.push_back(individual);
-		std::cout << population[population.size() - 1].pp_network.identification << std::endl;
 	}
 
-	std::cout << "WHAT IN ACTUAL FUCK" << std::endl;
-	std::cout << population.size() << std::endl;
-	for (Individual individual : population)
-	{
-		std::cout << "WTF" << std::endl;
-		std::cout << individual.pp_network.identification << std::endl;
-	}
 	return population;
 }
 
