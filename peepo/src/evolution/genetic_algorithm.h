@@ -8,6 +8,7 @@ using json = nlohmann::json;
 
 struct Individual
 {
+	Individual();
 	Individual(const Individual&);
 	Individual(PPNetwork& pp_network_, double = 0.0, double = 0.0, double = 0.0);
 	Individual& operator=(const Individual&);
@@ -51,16 +52,19 @@ private:
 	double p_mut_top;
 	double p_mut_cpd;
 
-	std::vector<Individual> get_selected_parents(std::vector<Individual>&, double);
-	std::vector<Individual> cross_over(std::vector<Individual>&);
-	std::vector<Individual> mutate(std::vector<Individual>&);
+	void select_parents(void);
+	void cross_over(void);
+	void mutate(void);
 
 public:
-	GeneticAlgorithm(const std::string& source_, unsigned  n_pop_, double p_mut_top_, double p_mut_cpd_, Individual dummy);
+	GeneticAlgorithm(const std::string& source_, unsigned  n_pop_, double p_mut_top_, double p_mut_cpd_);
 	
+	std::vector<Individual> selected_offspring;
+	std::vector<Individual> selected_parents;
 	Individual best_chromosome;
+
 	double avg_fitness = 0;
 	
-	std::vector<Individual> first_generation(void);
-	std::vector<Individual> evolve(std::vector<Individual>&);
+	std::vector<Individual>& first_generation(void);
+	void evolve(void);
 };

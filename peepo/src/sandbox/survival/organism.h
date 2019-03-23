@@ -53,11 +53,12 @@ private:
 	RelevantSector relevant_sector;
 	std::vector<std::vector<double>> sectors;
 	
-	std::string name;
-
 public:
+	SurvivalPeepo(const std::string&, std::vector<double>&, std::vector<Obstacle>&, PPNetwork&);
+
 	GenerativeModel gen_model;
 
+	std::string name;
 	std::vector<double> pos;
 	std::vector<Obstacle> obstacles;
 	double rotation;
@@ -70,17 +71,12 @@ public:
 	std::map<std::string, bool> motor;
 	std::map<std::string, bool> view;
 
-	SurvivalPeepo(std::string, std::vector<double>&, std::vector<Obstacle>&, PPNetwork&);
-	SurvivalPeepo(const SurvivalPeepo&);
-	SurvivalPeepo& operator=(const SurvivalPeepo&);
-
 	void action(const std::string&, const std::vector<double>&);
 	std::vector<double> observation(const std::string&);
 	static std::string get_quadrant(const std::string&);
 	static std::string get_direction(const std::string&);
 
 	void update();
-	void draw();
 	void calculate_obstacles();
 };
 

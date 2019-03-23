@@ -7,14 +7,11 @@
 class GenerativeModel {
 
 private:
-	Peepo* peepo;
 
 public:
-	PPNetwork pp_network;
+	Peepo& peepo;
 
-	GenerativeModel(PPNetwork&, Peepo*);
-	GenerativeModel(const GenerativeModel&);
-	GenerativeModel& operator=(const GenerativeModel&);
+	GenerativeModel(Peepo&);
 
 	double process();
 

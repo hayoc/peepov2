@@ -4,6 +4,12 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
+
+Individual::Individual()
+{
+
+}
+
 Individual::Individual(PPNetwork& pp_network_, double fitness_, double mut_top_, double mut_cpd_) :
 	pp_network(pp_network_),
 	fitness(fitness_),
@@ -423,20 +429,18 @@ GeneticAlgorithm::GeneticAlgorithm(
 	const std::string& source_,
 	unsigned  n_pop_,
 	double p_mut_top_,
-	double p_mut_cpd_,
-	Individual dummy) :
+	double p_mut_cpd_) :
 	source(source_),
 	n_pop(n_pop_),
 	p_mut_top(p_mut_top_),
-	p_mut_cpd(p_mut_cpd_),
-	best_chromosome(dummy)
+	p_mut_cpd(p_mut_cpd_)
 {
 	srand(time(NULL));
 }
 
-std::vector<Individual> GeneticAlgorithm::first_generation(void)
+std::vector<Individual>& GeneticAlgorithm::first_generation(void)
 {
-	std::vector<Individual> population;
+	selected_offspring.clear();
 
 	PPNetwork pp_template;
 	std::ifstream ifs(source);
@@ -484,34 +488,36 @@ std::vector<Individual> GeneticAlgorithm::first_generation(void)
 			}
 		}
 		Individual individual{ pp };
-		population.push_back(individual);
+		selected_offspring.push_back(individual);
 	}
-
-	return population;
-}
-
-std::vector<Individual> GeneticAlgorithm::evolve(std::vector<Individual>& population)
-{
-	std::sort(population.begin(), population.end(), [](Individual a, Individual b) { return a.fitness > b.fitness; });
-	if (population.front().fitness >= best_chromosome.fitness) { best_chromosome = population.front(); }
-
-	avg_fitness = 0.0;
-	for (Individual individual : population) { avg_fitness += individual.fitness; }
-	avg_fitness /= population.size();
-
-	// SELECTION
-	std::vector<Individual> selected_parents = get_selected_parents(population, avg_fitness);
-	// CROSS-OVER
-	std::vector<Individual> selected_offspring = cross_over(selected_parents);
-	//MUTATION
-	selected_offspring = mutate(selected_offspring);
 
 	return selected_offspring;
 }
 
-std::vector<Individual> GeneticAlgorithm::get_selected_parents(std::vector<Individual>& population, double avg_fitness)
+void GeneticAlgorithm::evolve(void)
 {
-	std::vector<Individual> selected_parents;
+	std::sort(selected_offspring.begin(), selected_offspring.end(), [](Individual a, Individual b) { return a.fitness > b.fitness; });
+	
+	if (selected_offspring.front().fitness >= best_chromosome.fitness) 
+	{ 
+		best_chromosome = Individual{ selected_offspring.front() }; 
+	}
+
+	avg_fitness = 0.0;
+	for (Individual individual : selected_offspring) { avg_fitness += individual.fitness; }
+	avg_fitness /= selected_offspring.size();
+
+	// SELECTION
+	select_parents();
+	// CROSS-OVER
+	cross_over();
+	// MUTATION
+	mutate();
+}
+
+void GeneticAlgorithm::select_parents(void)
+{
+	selected_parents.clear();
 
 	std::vector<unsigned> pool;
 	for (unsigned index = 0; index < n_pop; index++) {
@@ -525,16 +531,14 @@ std::vector<Individual> GeneticAlgorithm::get_selected_parents(std::vector<Indiv
 		unsigned pool_index = std::rand() % (pool.size() - 1);
 		unsigned parent_index = pool[pool_index];
 
-		PPNetwork pp{ population[parent_index].pp_network };
+		PPNetwork pp{ selected_offspring[parent_index].pp_network };
 		selected_parents.push_back(Individual{ pp });
 	}
-
-	return selected_parents;
 }
 
-std::vector<Individual> GeneticAlgorithm::cross_over(std::vector<Individual>& selected_parents)
+void GeneticAlgorithm::cross_over(void)
 {
-	std::vector<Individual> selected_offspring;
+	selected_offspring.clear();
 	std::vector<std::vector<Individual>> mating_couples = get_mating_couples(selected_parents);
 
 	for (std::vector<Individual> couple : mating_couples)
@@ -630,15 +634,13 @@ std::vector<Individual> GeneticAlgorithm::cross_over(std::vector<Individual>& se
 			selected_offspring.push_back(individual);
 		}
 	}
-	return selected_offspring;
 }
 
-std::vector<Individual> GeneticAlgorithm::mutate(std::vector<Individual>& selected_offspring)
+void GeneticAlgorithm::mutate(void)
 {
 	for (Individual individual : selected_offspring)
 	{
 		if (individual.mut_top <= p_mut_top) { mutate_topology(individual.pp_network); }
 		if (individual.mut_cpd <= p_mut_cpd) { mutate_cpds(individual.pp_network); }
 	}
-	return selected_offspring;
 }

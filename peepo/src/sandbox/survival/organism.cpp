@@ -1,43 +1,20 @@
 #include "organism.h"
 
 
-SurvivalPeepo::SurvivalPeepo(std::string name_, std::vector<double>& pos_, std::vector<Obstacle>& obstacles_, PPNetwork& pp_network_) :
+SurvivalPeepo::SurvivalPeepo(const std::string& name_, std::vector<double>& pos_, std::vector<Obstacle>& obstacles_, PPNetwork& pp_network_) :
+	Peepo(pp_network_),
 	name(name_),
 	pos(pos_),
 	obstacles(obstacles_),
-	gen_model(pp_network_, this),
+	gen_model(*this),
 	rotation(0.f),
-	health(0)
+	health(0),
+	motor({ {LEFT, false}, {RIGHT, false} }),
+	view({ {LEFT, false}, {RIGHT, false} })
 {
-	motor[LEFT] = false;
-	motor[RIGHT] = false;
-	view["left"] = false;
-	view["right"] = false;
 	for (double angle = -30.0; angle < 30.0; angle += 10.0) {
 		sectors.push_back({ angle*PI / 180., (angle + 10.0)*PI / 180.0 });
 	}
-}
-
-SurvivalPeepo::SurvivalPeepo(const SurvivalPeepo& peepo) :
-	name(peepo.name),
-	pos(peepo.pos),
-	obstacles(peepo.obstacles),
-	gen_model(peepo.gen_model),
-	rotation(peepo.rotation),
-	health(peepo.health)
-{
-
-}
-
-SurvivalPeepo& SurvivalPeepo::operator=(const SurvivalPeepo& peepo)
-{
-	name = peepo.name;
-	pos = peepo.pos;
-	obstacles = peepo.obstacles;
-	gen_model = peepo.gen_model;
-	rotation = peepo.rotation;
-	health = peepo.health;
-	return *this;
 }
 
 void SurvivalPeepo::action(const std::string& node, const std::vector<double>& prediction)
@@ -53,16 +30,18 @@ void SurvivalPeepo::action(const std::string& node, const std::vector<double>& p
 
 std::vector<double> SurvivalPeepo::observation(const std::string& node)
 {
-	std::cout << node << std::endl;
-	for (auto& entry : view)
-	{
-		std::cout << entry.first << " - " << entry.second << std::endl;
-	}
 	if (node.find(VISION) != std::string::npos)
 	{
-		if (view[get_quadrant(node)])
+		if (view.empty()) {
+			std::cout << "View is empty." << std::endl;
+			std::cin.get();
+		}
+
+		std::map<std::string, bool>::iterator it = view.find(get_quadrant(node));
+		if (it != view.end())
 		{
 			return { 0.1, 0.9 };
+
 		}
 		else
 		{
@@ -71,7 +50,13 @@ std::vector<double> SurvivalPeepo::observation(const std::string& node)
 	}
 	if (node.find(MOTOR) != std::string::npos)
 	{
-		if (motor[get_direction(node)])
+		if (motor.empty()) {
+			std::cout << "Motor is empty." << std::endl;
+			std::cin.get();
+		}
+
+		std::map<std::string, bool>::iterator it = motor.find(get_direction(node));
+		if (it != motor.end())
 		{
 			return { 0.1, 0.9 };
 		}
@@ -171,11 +156,11 @@ void SurvivalPeepo::calculate_obstacles()
 	}
 	if ((relevant_sector.index == 4) || (relevant_sector.index == 5) || (relevant_sector.index == 6))
 	{
-		view["right"] = true;
+		view[RIGHT] = true;
 	}
 	else if ((relevant_sector.index == 1) || (relevant_sector.index == 2) || (relevant_sector.index == 3))
 	{
-		view["left"] = true;
+		view[LEFT] = true;
 	}
 	std::string only_true = std::to_string(relevant_sector.index);
 
@@ -204,7 +189,7 @@ std::string SurvivalPeepo::get_direction(const std::string& name)
 std::string SurvivalPeepo::get_quadrant(const std::string& name)
 {
 	std::string quad = "0";
-	std::vector<std::string> quadrants = { "left","right"};
+	std::vector<std::string> quadrants = { LEFT, RIGHT };
 	for (auto qd : quadrants)
 	{
 		if (name.find(qd) != std::string::npos) { quad = qd; break; }

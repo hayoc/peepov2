@@ -140,26 +140,8 @@ namespace Survival
 				// Display things on screen
 				window.display();
 			}
-
 		}
 	};
-
-	static std::vector<SurvivalPeepo> create_peepo_population(std::vector<Individual> population, const std::string& obstacles_path)
-	{
-		std::vector<SurvivalPeepo> peepos;
-		
-		std::vector<Obstacle> obstacles = read_obstacles(obstacles_path);
-		std::vector<double> pos = { WIN_SIZE / 2, WIN_SIZE / 2 };
-		
-		for (int i = 0; i < population.size(); i++)
-		{
-			std::string name = "Peepo_" + std::to_string(i);
-			SurvivalPeepo peepo{ name, pos, obstacles, population[i].pp_network };
-			peepos.push_back(peepo);
-		}
-
-		return peepos;
-	}
 
 	static void evolution(const std::string& obstacles_path)
 	{
@@ -168,16 +150,24 @@ namespace Survival
 		unsigned n_pop = 10;
 		unsigned n_gen = 10;
 
-		PPNetwork pp;
-		Individual individual{ pp };
-		
-		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2, individual };
-		std::vector<Individual> population = ga.first_generation();
+		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2 };
+		std::vector<Individual>& population = ga.first_generation();
 
 		std::vector<double> avg_fitnesses;
 		for (unsigned gen = 0; gen < n_gen; gen++)
 		{
-			std::vector<SurvivalPeepo> peepos = create_peepo_population(population, obstacles_path);
+			std::cout << "Generation: " << gen << std::endl;
+
+			std::vector<Obstacle> obstacles = read_obstacles(obstacles_path);
+			std::vector<double> pos = { WIN_SIZE / 2, WIN_SIZE / 2 };
+
+			std::vector<SurvivalPeepo> peepos;
+			for (int i = 0; i < population.size(); i++)
+			{
+				std::string name = "Peepo_" + std::to_string(i);
+				SurvivalPeepo peepo{ name, pos, obstacles, population[i].pp_network };
+				peepos.push_back(peepo);
+			}
 
 			for (unsigned age = 0; age < max_age; age++)
 			{
@@ -185,24 +175,22 @@ namespace Survival
 				{
 					peepo.update();
 				}
+				//std::cout << "Age : " << age << std::endl;
 			}
+
+			ga.evolve();
 
 			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health; }
 			avg_fitnesses.push_back(ga.avg_fitness);
-			population = ga.evolve(population);
+
+			std::cout << "Avg Fitness: " << avg_fitnesses[gen] << std::endl;
 		}
 
 		Individual best_individual = ga.best_chromosome;
 		std::ofstream ofs("data/survival_network_evolved.json");
 		best_individual.pp_network.to_file(ofs);
 		std::cout << "Best fitness: " << best_individual.fitness << std::endl;
-
-		for (double avg_fit : avg_fitnesses)
-		{
-			std::cout << "Avg Fitness: " << avg_fit << std::endl;
-		}
 	}
-
 
 	static void verification(const std::string& obstacles_path)
 	{
