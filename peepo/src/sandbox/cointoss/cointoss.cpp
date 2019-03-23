@@ -11,40 +11,41 @@ using json = nlohmann::json;
 
 namespace Cointoss
 {
-	class CointossPeepo :public Peepo {
-	private:
-		std::vector<unsigned>& coin_set;
-		int index{ 0 };
-	public:
-		CointossPeepo(std::vector<unsigned>& coin_set_)
-			: coin_set(coin_set_) {}
+	//class CointossPeepo :public Peepo {
+	//private:
+	//	std::vector<unsigned> coin_set;
+	//	int index{ 0 };
+	//public:
+	//	CointossPeepo(){}
+	//	CointossPeepo(std::vector<unsigned>& coin_set_)
+	//		: coin_set(coin_set_) {}
 
-		void action(const std::string& node_name, const std::vector<double>& prediction)
-		{
+	//	void action(const std::string& node_name, const std::vector<double>& prediction)
+	//	{
 
-		}
+	//	}
 
-		std::vector<double> observation(const std::string& node_name)
-		{
-			// 0 = heads, 1 = tails
-			if (coin_set[index] == 0)
-			{
-				std::vector<double> v = { 0.99, 0.01 };
-				index++;
-				return v;
-			}
-			else
-			{
-				std::vector<double> v = { 0.01, 0.99 };
-				index++;
-				return v;
-			}
-		}
-	};
+	//	std::vector<double> observation(const std::string& node_name)
+	//	{
+	//		// 0 = heads, 1 = tails
+	//		if (coin_set[index] == 0)
+	//		{
+	//			std::vector<double> v = { 0.99, 0.01 };
+	//			index++;
+	//			return v;
+	//		}
+	//		else
+	//		{
+	//			std::vector<double> v = { 0.01, 0.99 };
+	//			index++;
+	//			return v;
+	//		}
+	//	}
+	//};
 
 	int run()
 	{
-		PPNetwork pp;
+		/*PPNetwork pp;
 		std::ifstream ifs("data/cointoss_network.json");
 		pp.from_file(ifs);
 
@@ -70,7 +71,7 @@ namespace Cointoss
 			errors.push_back(er);
 		}
 
-		std::cin.get();
+		std::cin.get();*/
 		return 0;
 	}
 }

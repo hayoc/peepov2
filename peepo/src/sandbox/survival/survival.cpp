@@ -181,7 +181,7 @@ namespace Survival
 
 			for (unsigned age = 0; age < max_age; age++)
 			{
-				for (SurvivalPeepo peepo : peepos)
+				for (auto& peepo : peepos)
 				{
 					peepo.update();
 				}

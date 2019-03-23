@@ -69,5 +69,6 @@
   <ItemGroup>
     <None Include="data\cointoss_network.json" />
     <None Include="data\survival_network.json" />
+    <None Include="data\survival_network_evolved.json" />
   </ItemGroup>
 </Project>

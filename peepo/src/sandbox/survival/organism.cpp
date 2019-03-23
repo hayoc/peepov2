@@ -5,7 +5,7 @@ SurvivalPeepo::SurvivalPeepo(std::string name_, std::vector<double>& pos_, std::
 	name(name_),
 	pos(pos_),
 	obstacles(obstacles_),
-	gen_model(pp_network_, *this),
+	gen_model(pp_network_, this),
 	rotation(0.f),
 	health(0)
 {
@@ -16,6 +16,28 @@ SurvivalPeepo::SurvivalPeepo(std::string name_, std::vector<double>& pos_, std::
 	for (double angle = -30.0; angle < 30.0; angle += 10.0) {
 		sectors.push_back({ angle*PI / 180., (angle + 10.0)*PI / 180.0 });
 	}
+}
+
+SurvivalPeepo::SurvivalPeepo(const SurvivalPeepo& peepo) :
+	name(peepo.name),
+	pos(peepo.pos),
+	obstacles(peepo.obstacles),
+	gen_model(peepo.gen_model),
+	rotation(peepo.rotation),
+	health(peepo.health)
+{
+
+}
+
+SurvivalPeepo& SurvivalPeepo::operator=(const SurvivalPeepo& peepo)
+{
+	name = peepo.name;
+	pos = peepo.pos;
+	obstacles = peepo.obstacles;
+	gen_model = peepo.gen_model;
+	rotation = peepo.rotation;
+	health = peepo.health;
+	return *this;
 }
 
 void SurvivalPeepo::action(const std::string& node, const std::vector<double>& prediction)
@@ -31,6 +53,11 @@ void SurvivalPeepo::action(const std::string& node, const std::vector<double>& p
 
 std::vector<double> SurvivalPeepo::observation(const std::string& node)
 {
+	std::cout << node << std::endl;
+	for (auto& entry : view)
+	{
+		std::cout << entry.first << " - " << entry.second << std::endl;
+	}
 	if (node.find(VISION) != std::string::npos)
 	{
 		if (view[get_quadrant(node)])

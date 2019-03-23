@@ -1,14 +1,33 @@
 #include "generative_model.h"
 
-GenerativeModel::GenerativeModel(PPNetwork& pp_network_, Peepo& peepo_):
-	pp_network(pp_network_),
-	peepo(peepo_)
+GenerativeModel::GenerativeModel(PPNetwork& pp_network_, Peepo* peepo_):
+	peepo(peepo_),
+	pp_network(pp_network_)
 {
-	pp_network.to_bayesian_network();
+
+}
+
+GenerativeModel::GenerativeModel(const GenerativeModel& gen_model) :
+	peepo(gen_model.peepo),
+	pp_network(gen_model.pp_network)
+{
+
+}
+
+GenerativeModel& GenerativeModel::operator=(const GenerativeModel& gen_model)
+{
+	peepo = gen_model.peepo;
+	pp_network = gen_model.pp_network;
+	return *this;
 }
 
 double GenerativeModel::process(void)
 {
+	if (pp_network.bn.number_of_nodes() == 0) 
+	{ 
+		pp_network.to_bayesian_network(); 
+	}
+
 	double total_prediction_error_size{ 0.0 };
 	std::map<std::string, std::vector<double>> predictions = predict();
 	for (auto& entry : predictions)
@@ -17,7 +36,7 @@ double GenerativeModel::process(void)
 		if (pp_network.is_leaf(node))
 		{
 			std::vector<double> prediction = entry.second;
-			std::vector<double> observation = peepo.observation(node);
+			std::vector<double> observation = peepo -> observation(node);
 
 			std::vector<double> prediction_error = calculate_error(prediction, observation);
 			double prediction_error_size = calculate_error_size(prediction, observation);
@@ -74,7 +93,7 @@ void GenerativeModel::hypothesis_update(const std::string& node_name, const std:
 	std::vector<std::string> pro_nodes = pp_network.get_pro_nodes();
 	if (std::find(pro_nodes.begin(), pro_nodes.end(), node_name) != pro_nodes.end())
 	{
-		peepo.action(node_name, prediction);
+		peepo -> action(node_name, prediction);
 	}
 	else
 	{

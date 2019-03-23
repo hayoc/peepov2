@@ -7,12 +7,15 @@
 class GenerativeModel {
 
 private:
-	PPNetwork pp_network;
-	Peepo& peepo;
-
+	Peepo* peepo;
 
 public:
-	GenerativeModel(PPNetwork&, Peepo&);
+	PPNetwork pp_network;
+
+	GenerativeModel(PPNetwork&, Peepo*);
+	GenerativeModel(const GenerativeModel&);
+	GenerativeModel& operator=(const GenerativeModel&);
+
 	double process();
 
 	std::map<std::string, std::vector<double>> predict();

@@ -1,0 +1,129 @@
+{
+  "header": {
+    "identification": "Survival",
+    "description": "Network to avoid obstacles",
+    "frozen": false,
+    "train_from": "",
+    "date": "2019-02-06 12:51:41.233943"
+  },
+  "nodes": {
+    "RON": [
+      {
+        "name": "root_left",
+        "card": 2
+      },
+      {
+        "name": "root_right",
+        "card": 2
+      }
+    ],
+    "EXT": [
+      {
+        "name": "LEN_vision_left",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_right",
+        "card": 2
+      },
+      {
+        "name": "dummy",
+        "card": 2
+      }
+    ],
+    "PRO": [
+      {
+        "name": "LEN_motor_left",
+        "card": 2
+      },
+      {
+        "name": "LEN_motor_right",
+        "card": 2
+      }
+    ]
+  },
+  "edges": [
+    [
+      "root_left",
+      "LEN_vision_left"
+    ],
+    [
+      "root_left",
+      "LEN_motor_right"
+    ],
+    [
+      "root_right",
+      "LEN_vision_right"
+    ],
+    [
+      "root_right",
+      "LEN_motor_left"
+    ],
+    [ "root_left", "dummy" ],
+    [ "root_right", "dummy" ]
+  ],
+  "cpds": {
+    "root_left": [
+      0.99,
+      0.01
+    ],
+    "root_right": [
+      0.99,
+      0.01
+    ],
+    "LEN_vision_left": [
+      [
+        0.99,
+        0.01
+      ],
+      [
+        0.01,
+        0.99
+      ]
+    ],
+    "LEN_vision_right": [
+      [
+        0.99,
+        0.01
+      ],
+      [
+        0.01,
+        0.99
+      ]
+    ],
+    "LEN_motor_left": [
+      [
+        0.99,
+        0.01
+      ],
+      [
+        0.01,
+        0.99
+      ]
+    ],
+    "LEN_motor_right": [
+      [
+        0.99,
+        0.01
+      ],
+      [
+        0.01,
+        0.99
+      ]
+    ],
+    "dummy": [
+      [
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    ]
+  }
+}
