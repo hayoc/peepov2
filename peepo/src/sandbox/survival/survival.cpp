@@ -213,9 +213,9 @@ namespace Survival
 	{
 		generate_obstacles(400, "data/survival_obstacles.json");
 
-		evolution("data/survival_obstacles.json");
-		//verification("data/survival_obstacles.json");
+		//evolution("data/survival_obstacles.json");
+		verification("data/survival_obstacles.json");
 
 		return 0;
 	}
-}
+} 
