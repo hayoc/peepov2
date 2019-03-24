@@ -56,7 +56,7 @@ private:
 public:
 	SurvivalPeepo(const std::string&, std::vector<double>&, std::vector<Obstacle>&, PPNetwork&);
 
-	GenerativeModel gen_model;
+	GenerativeModel generative_model;
 
 	std::string name;
 	std::vector<double> pos;

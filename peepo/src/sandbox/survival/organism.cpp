@@ -6,12 +6,12 @@ SurvivalPeepo::SurvivalPeepo(const std::string& name_, std::vector<double>& pos_
 	name(name_),
 	pos(pos_),
 	obstacles(obstacles_),
-	gen_model(*this),
 	rotation(0.f),
 	health(0),
 	motor({ {LEFT, false}, {RIGHT, false} }),
 	view({ {LEFT, false}, {RIGHT, false} })
 {
+	
 	for (double angle = -30.0; angle < 30.0; angle += 10.0) {
 		sectors.push_back({ angle*PI / 180., (angle + 10.0)*PI / 180.0 });
 	}
@@ -70,7 +70,7 @@ std::vector<double> SurvivalPeepo::observation(const std::string& node)
 
 void SurvivalPeepo::update()
 {
-	gen_model.process();
+	generative_model.process(*this);
 
 	pos[0] += std::cos(rotation) * PEEPO_SPEED;
 	pos[1] += std::sin(rotation) * PEEPO_SPEED;

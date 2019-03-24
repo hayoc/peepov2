@@ -1,12 +1,7 @@
 #include "generative_model.h"
 
-GenerativeModel::GenerativeModel(Peepo& peepo_):
-	peepo(peepo_)
-{
 
-}
-
-double GenerativeModel::process(void)
+double GenerativeModel::process(Peepo& peepo)
 {
 	if (peepo.pp_network.bn.number_of_nodes() == 0) 
 	{ 
@@ -14,7 +9,7 @@ double GenerativeModel::process(void)
 	}
 
 	double total_prediction_error_size{ 0.0 };
-	std::map<std::string, std::vector<double>> predictions = predict();
+	std::map<std::string, std::vector<double>> predictions = predict(peepo);
 	for (auto& entry : predictions)
 	{
 		std::string node = entry.first;
@@ -29,14 +24,14 @@ double GenerativeModel::process(void)
 			if (prediction_error_size > 0.1) //TODO: Arbitrary
 			{
 				//std::cout << "Prediction for node: " << node << " = [" << prediction[0] << ", " << prediction[1] << "] VS Observation = [" << observation[0] << ", " << observation[1] <<  std::endl;
-				error_minimization(node, prediction_error, prediction);
+				error_minimization(peepo, node, prediction_error, prediction);
 			}
 		}
 	}
 	return total_prediction_error_size;
 }
 
-std::map<std::string, std::vector<double>> GenerativeModel::predict(void)
+std::map<std::string, std::vector<double>> GenerativeModel::predict(Peepo& peepo)
 {
 	std::vector<std::string> inferred = peepo.pp_network.get_leaf_nodes();
 	return peepo.pp_network.do_inference(inferred);
@@ -68,12 +63,12 @@ double GenerativeModel::calculate_error_size(const std::vector<double>& pred, co
 	return -entropy;
 }
 
-void GenerativeModel::error_minimization(const std::string& node_name, const std::vector<double>& prediction_error, const std::vector<double>& prediction)
+void GenerativeModel::error_minimization(Peepo& peepo, const std::string& node_name, const std::vector<double>& prediction_error, const std::vector<double>& prediction)
 {
-	hypothesis_update(node_name, prediction_error, prediction);
+	hypothesis_update(peepo, node_name, prediction_error, prediction);
 }
 
-void GenerativeModel::hypothesis_update(const std::string& node_name, const std::vector<double>& prediction_error, const std::vector<double>& prediction)
+void GenerativeModel::hypothesis_update(Peepo& peepo, const std::string& node_name, const std::vector<double>& prediction_error, const std::vector<double>& prediction)
 {
 	std::vector<std::string> pro_nodes = peepo.pp_network.get_pro_nodes();
 	if (std::find(pro_nodes.begin(), pro_nodes.end(), node_name) != pro_nodes.end())

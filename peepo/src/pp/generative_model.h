@@ -6,20 +6,15 @@
 
 class GenerativeModel {
 
-private:
-
 public:
-	Peepo& peepo;
 
-	GenerativeModel(Peepo&);
+	double process(Peepo&);
 
-	double process();
-
-	std::map<std::string, std::vector<double>> predict();
+	std::map<std::string, std::vector<double>> predict(Peepo& peepo);
 	std::vector<double> calculate_error(const std::vector<double>&, const std::vector<double>&);
 	double calculate_error_size(const std::vector<double>&, const std::vector<double>&);
-	void error_minimization(const std::string&, const std::vector<double>&, const std::vector<double>&);
-	void hypothesis_update(const std::string&, const std::vector<double>&, const std::vector<double>&);
+	void error_minimization(Peepo& peepo, const std::string&, const std::vector<double>&, const std::vector<double>&);
+	void hypothesis_update(Peepo& peepo, const std::string&, const std::vector<double>&, const std::vector<double>&);
 };
 
 #endif

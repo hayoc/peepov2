@@ -175,7 +175,7 @@ namespace Survival
 				{
 					peepo.update();
 				}
-				//std::cout << "Age : " << age << std::endl;
+				std::cout << "Age : " << age << std::endl;
 			}
 
 			ga.evolve();
