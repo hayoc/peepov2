@@ -32,13 +32,7 @@ std::vector<double> SurvivalPeepo::observation(const std::string& node)
 {
 	if (node.find(VISION) != std::string::npos)
 	{
-		if (view.empty()) {
-			std::cout << "View is empty." << std::endl;
-			std::cin.get();
-		}
-
-		std::map<std::string, bool>::iterator it = view.find(get_quadrant(node));
-		if (it != view.end())
+		if (view[get_quadrant(node)])
 		{
 			return { 0.1, 0.9 };
 
@@ -50,13 +44,7 @@ std::vector<double> SurvivalPeepo::observation(const std::string& node)
 	}
 	if (node.find(MOTOR) != std::string::npos)
 	{
-		if (motor.empty()) {
-			std::cout << "Motor is empty." << std::endl;
-			std::cin.get();
-		}
-
-		std::map<std::string, bool>::iterator it = motor.find(get_direction(node));
-		if (it != motor.end())
+		if (motor[get_direction(node)])
 		{
 			return { 0.1, 0.9 };
 		}
