@@ -148,7 +148,7 @@ namespace Survival
 		std::string source = "data/survival_network.json";
 		unsigned max_age = 100;
 		unsigned n_pop = 10;
-		unsigned n_gen = 10;
+		unsigned n_gen = 5;
 
 		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2 };
 		std::vector<Individual>& population = ga.first_generation();
@@ -187,14 +187,11 @@ namespace Survival
 			ga.selected_offspring = population;
 			avg_fitnesses.push_back(ga.avg_fitness);
 
-		
-
 			std::cout << "Avg Fitness: " << avg_fitnesses[gen] << std::endl;
 		}
 
 		Individual best_individual = ga.best_chromosome;
 		std::ofstream ofs("data/survival_network_evolved.json");
-		//best_individual.pp_network["Frozen"] = true;
 		best_individual.pp_network.to_file(ofs);
 		std::cout << "Best fitness: " << best_individual.fitness << std::endl;
 	}

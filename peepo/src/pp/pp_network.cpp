@@ -89,6 +89,8 @@ json PPNetwork::to_json(void)
 	auto pros = json::array();
 	for (auto& node : pro_nodes) { pros.push_back({ {"name", node}, {"card", card_map[node]} }); }
 	jzon["nodes"]["PRO"] = pros;
+
+	return jzon;
 }
 
 void PPNetwork::from_file(std::ifstream& ifs)
