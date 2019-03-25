@@ -146,7 +146,7 @@ namespace Survival
 	static void evolution(const std::string& obstacles_path)
 	{
 		std::string source = "data/survival_network.json";
-		unsigned max_age = 10;
+		unsigned max_age = 100;
 		unsigned n_pop = 10;
 		unsigned n_gen = 10;
 
@@ -174,14 +174,18 @@ namespace Survival
 				for ( int  peepo = 0; peepo < peepos.size();peepo++)
 				{
 					peepos[peepo].update();
+					//std::cout << "status peepo["<< peepo <<"] : "  << " Position " << peepos[peepo].pos[0] << ", " << peepos[peepo].pos[1] << " and rotation " << peepos[peepo].rotation << std::endl;
 					//ga.selected_offspring[peepo].pp_network = peepos[peepo].pp_network;
+					//ga.selected_offspring[peepo].fitness = peepos[peepo].health;
 					//std::cout << ga.selected_offspring[peepo].pp_network.cpds << std::endl;
 				}
-				std::cout << "Age : " << age << std::endl;
+				//std::cout << "Age : " << age << std::endl;
 			}
-			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health; }
-			avg_fitnesses.push_back(ga.avg_fitness);
+
 			ga.evolve();
+			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health;  }
+			ga.selected_offspring = population;
+			avg_fitnesses.push_back(ga.avg_fitness);
 
 		
 
@@ -190,6 +194,7 @@ namespace Survival
 
 		Individual best_individual = ga.best_chromosome;
 		std::ofstream ofs("data/survival_network_evolved.json");
+		//best_individual.pp_network["Frozen"] = true;
 		best_individual.pp_network.to_file(ofs);
 		std::cout << "Best fitness: " << best_individual.fitness << std::endl;
 	}
@@ -213,7 +218,7 @@ namespace Survival
 
 	int run()
 	{
-		generate_obstacles(400, "data/survival_obstacles.json");
+		generate_obstacles(4000, "data/survival_obstacles.json");
 
 		evolution("data/survival_obstacles.json");
 		//verification("data/survival_obstacles.json");

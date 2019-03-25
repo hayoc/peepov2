@@ -62,7 +62,7 @@ public:
 	std::vector<double> pos;
 	std::vector<Obstacle> obstacles;
 	double rotation;
-	unsigned health;
+	double health;
 
 	std::vector<double> edge_right;
 	std::vector<double> edge_left;

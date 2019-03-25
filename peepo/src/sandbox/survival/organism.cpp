@@ -7,7 +7,7 @@ SurvivalPeepo::SurvivalPeepo(const std::string& name_, std::vector<double>& pos_
 	pos(pos_),
 	obstacles(obstacles_),
 	rotation(0.f),
-	health(0),
+	health(1.0),
 	motor({ {LEFT, false}, {RIGHT, false} }),
 	view({ {LEFT, false}, {RIGHT, false} })
 {
@@ -113,7 +113,7 @@ void SurvivalPeepo::calculate_obstacles()
 
 	int to_remove = -1;
 	int count = 0;
-
+	health++;//CONDITIONAL REWARD, will be substracted if collision occurs
 	double closest_distance = 10000.0;
 	relevant_sector.index = 0;
 	for (int index = 0; index < sectors.size(); index++) {
@@ -128,7 +128,7 @@ void SurvivalPeepo::calculate_obstacles()
 			if (is_collision) {
 				double distance = sqrt(pow((obstacle.y - pos[1]), 2.) + pow((obstacle.x - pos[0]), 2.));
 				if (distance <= SIZE_PEEPO + SIZE_OBST) {
-					health++;
+					health--;//PENALTY
 					break;
 				}
 				if (distance > SIZE_PEEPO + SIZE_OBST && distance <= PEEPO_RADIUS) {
