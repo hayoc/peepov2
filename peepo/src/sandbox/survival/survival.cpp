@@ -218,10 +218,10 @@ namespace Survival
 
 	int run()
 	{
-		generate_obstacles(4000, "data/survival_obstacles.json");
+		generate_obstacles(400, "data/survival_obstacles.json");
 
-		evolution("data/survival_obstacles.json");
-		//verification("data/survival_obstacles.json");
+		//evolution("data/survival_obstacles.json");
+		verification("data/survival_obstacles.json");
 		std::cout << "Done" << std::endl;
 		std::cin.get();
 		return 0;

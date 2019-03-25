@@ -43,6 +43,7 @@ private:
 	void add_node_to_maps(nlohmann::json&, unsigned&, const std::string&);
 	void make_omega_map();
 
+
 public:
 	std::string identification;
 	std::string description;

@@ -70,20 +70,25 @@ void PPNetwork::from_json(const json& jzon)
 
 json PPNetwork::to_json(void)
 {
-	return {
+	json jzon = {
 		{"header", {
 			{"identification", identification},
 			{"description", description},
 			{"date", date}
 		}},
-		{"nodes", {
-			{"RON", root_nodes},
-			{"EXT", ext_nodes},
-			{"PRO", pro_nodes}
-		}},
 		{"edges", edges},
 		{"cpds", cpds}
 	};
+
+	auto rons = json::array();
+	for (auto& node : root_nodes) { rons.push_back({ {"name", node}, {"card", card_map[node]} }); }
+	jzon["nodes"]["RON"] = rons;
+	auto exts = json::array();
+	for (auto& node : ext_nodes) { exts.push_back({ {"name", node}, {"card", card_map[node]} }); }
+	jzon["nodes"]["EXT"] = exts;
+	auto pros = json::array();
+	for (auto& node : pro_nodes) { pros.push_back({ {"name", node}, {"card", card_map[node]} }); }
+	jzon["nodes"]["PRO"] = pros;
 }
 
 void PPNetwork::from_file(std::ifstream& ifs)
