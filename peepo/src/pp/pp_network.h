@@ -32,7 +32,7 @@ private:
 	std::vector<std::string> pro_nodes;
 
 	std::vector<std::vector<std::string>> edges;
-	nlohmann::json cpds;
+	//nlohmann::json cpds;
 
 	std::map<std::string, unsigned>  node_map;
 	std::map<std::string, unsigned> card_map;
@@ -47,6 +47,7 @@ public:
 	std::string identification;
 	std::string description;
 	std::string date;
+	nlohmann::json cpds;
 
 	PPNetwork();
 	PPNetwork(const PPNetwork&);

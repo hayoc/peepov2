@@ -146,7 +146,7 @@ namespace Survival
 	static void evolution(const std::string& obstacles_path)
 	{
 		std::string source = "data/survival_network.json";
-		unsigned max_age = 1000;
+		unsigned max_age = 10;
 		unsigned n_pop = 10;
 		unsigned n_gen = 10;
 
@@ -171,17 +171,19 @@ namespace Survival
 
 			for (unsigned age = 0; age < max_age; age++)
 			{
-				for (auto& peepo : peepos)
+				for ( int  peepo = 0; peepo < peepos.size();peepo++)
 				{
-					peepo.update();
+					peepos[peepo].update();
+					//ga.selected_offspring[peepo].pp_network = peepos[peepo].pp_network;
+					//std::cout << ga.selected_offspring[peepo].pp_network.cpds << std::endl;
 				}
 				std::cout << "Age : " << age << std::endl;
 			}
-
-			ga.evolve();
-
 			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health; }
 			avg_fitnesses.push_back(ga.avg_fitness);
+			ga.evolve();
+
+		
 
 			std::cout << "Avg Fitness: " << avg_fitnesses[gen] << std::endl;
 		}
@@ -213,9 +215,10 @@ namespace Survival
 	{
 		generate_obstacles(400, "data/survival_obstacles.json");
 
-		//evolution("data/survival_obstacles.json");
-		verification("data/survival_obstacles.json");
-
+		evolution("data/survival_obstacles.json");
+		//verification("data/survival_obstacles.json");
+		std::cout << "Done" << std::endl;
+		std::cin.get();
 		return 0;
 	}
 } 

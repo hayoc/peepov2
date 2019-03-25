@@ -447,6 +447,7 @@ std::vector<Individual>& GeneticAlgorithm::first_generation(void)
 	pp_template.from_file(ifs);
 
 	std::vector<json> topologies = get_topologies(pp_template, n_pop);
+	
 	for (json topology : topologies)
 	{
 		std::vector<std::vector<std::string>> edges = topology["edges"];
@@ -490,7 +491,6 @@ std::vector<Individual>& GeneticAlgorithm::first_generation(void)
 		Individual individual{ pp };
 		selected_offspring.push_back(individual);
 	}
-
 	return selected_offspring;
 }
 
@@ -502,17 +502,21 @@ void GeneticAlgorithm::evolve(void)
 	{ 
 		best_chromosome = Individual{ selected_offspring.front() }; 
 	}
-
+	
 	avg_fitness = 0.0;
 	for (Individual individual : selected_offspring) { avg_fitness += individual.fitness; }
+	
 	avg_fitness /= selected_offspring.size();
 
 	// SELECTION
 	select_parents();
+
 	// CROSS-OVER
 	cross_over();
+
 	// MUTATION
 	mutate();
+	
 }
 
 void GeneticAlgorithm::select_parents(void)
@@ -526,11 +530,11 @@ void GeneticAlgorithm::select_parents(void)
 			pool.push_back(index);
 		}
 	}
+	
 	std::random_shuffle(pool.begin(), pool.end());
 	for (unsigned draw = 0; draw < NUMBER_OF_MATING_PARENTS; draw++) {
 		unsigned pool_index = std::rand() % (pool.size() - 1);
 		unsigned parent_index = pool[pool_index];
-
 		PPNetwork pp{ selected_offspring[parent_index].pp_network };
 		selected_parents.push_back(Individual{ pp });
 	}
@@ -632,6 +636,14 @@ void GeneticAlgorithm::cross_over(void)
 			}
 			Individual individual{ pp, 0.0, mut_top, mut_cpd };
 			selected_offspring.push_back(individual);
+		}
+	}
+	while (true) {//expand the population to npop; the added peepo which are clones, will be mutated
+		int n_chrom = selected_parents.size() + selected_offspring.size();
+		if (n_chrom > n_pop) { break; }
+		for (auto x : selected_parents) {
+			Individual y(x.pp_network, 0.0, 0.0, 0.0);
+			selected_offspring.push_back(y);
 		}
 	}
 }
