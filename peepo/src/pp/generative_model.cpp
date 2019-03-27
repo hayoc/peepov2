@@ -88,7 +88,21 @@ void GenerativeModel::hypothesis_update(Peepo& peepo, const std::string& node_na
 			//std::string oldname = entry.first;
 			//std::vector<double> old = pp_network.get_cpd(oldname);
 			//std::cout << "Hypo Update " << oldname << "  FROM [" << old[0] << ", " << old[1] << "] TO [" << entry.second[0] << ", " << entry.second[1] << "]" << std::endl;
-			peepo.pp_network.add_cpd(entry.first, entry.second);
+
+			//TODO: This only works for hypos with card 2
+			std::vector<double> hypo = entry.second;
+			if (hypo[0] == 1.0)
+			{
+				hypo[0] -= 0.01;
+				hypo[1] += 0.01;
+			}
+			if (hypo[1] == 1.0)
+			{
+				hypo[0] += 0.01;
+				hypo[1] -= 0.01;
+			}
+
+			peepo.pp_network.add_cpd(entry.first, hypo);
 		}
 		peepo.pp_network.to_bayesian_network();
 	}

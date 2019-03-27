@@ -113,22 +113,22 @@ void SurvivalPeepo::calculate_obstacles()
 
 	int to_remove = -1;
 	int count = 0;
-	health++;//CONDITIONAL REWARD, will be substracted if collision occurs
 	double closest_distance = 10000.0;
 	relevant_sector.index = 0;
 	for (int index = 0; index < sectors.size(); index++) {
 		auto sector = sectors[index];
 		double lower_edge = sector[0];
 		double upper_edge = sector[1];
-		//to_remove = -1;
 		count = 0;
-		for (auto obstacle : obstacles) {
+		for (int i = obstacles.size() - 1; i >= 0; i--) {
+			Obstacle& obstacle = obstacles[i];
 			bool is_collision = collision(pos, { obstacle.x, obstacle.y },
 				rotation, lower_edge, upper_edge, PEEPO_RADIUS);
 			if (is_collision) {
 				double distance = sqrt(pow((obstacle.y - pos[1]), 2.) + pow((obstacle.x - pos[0]), 2.));
 				if (distance <= SIZE_PEEPO + SIZE_OBST) {
-					health--;//PENALTY
+					health++;
+					obstacles.erase(obstacles.begin() + i);
 					break;
 				}
 				if (distance > SIZE_PEEPO + SIZE_OBST && distance <= PEEPO_RADIUS) {

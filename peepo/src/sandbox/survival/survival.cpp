@@ -146,9 +146,9 @@ namespace Survival
 	static void evolution(const std::string& obstacles_path)
 	{
 		std::string source = "data/survival_network.json";
-		unsigned max_age = 100;
-		unsigned n_pop = 10;
-		unsigned n_gen = 5;
+		unsigned max_age = 1000;
+		unsigned n_pop = 20;
+		unsigned n_gen = 20;
 
 		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2 };
 		std::vector<Individual>& population = ga.first_generation();
@@ -169,31 +169,29 @@ namespace Survival
 				peepos.push_back(peepo);
 			}
 
+			const unsigned num_threads = population.size();
 			for (unsigned age = 0; age < max_age; age++)
 			{
-				for ( int  peepo = 0; peepo < peepos.size();peepo++)
-				{
+				//for ( int  peepo = 0; peepo < peepos.size();peepo++)
+				//{
+				//	peepos[peepo].update();
+				//}
+				parallel_for(num_threads, 0, peepos.size(), [&](long peepo) { 
 					peepos[peepo].update();
-					//std::cout << "status peepo["<< peepo <<"] : "  << " Position " << peepos[peepo].pos[0] << ", " << peepos[peepo].pos[1] << " and rotation " << peepos[peepo].rotation << std::endl;
-					//ga.selected_offspring[peepo].pp_network = peepos[peepo].pp_network;
-					//ga.selected_offspring[peepo].fitness = peepos[peepo].health;
-					//std::cout << ga.selected_offspring[peepo].pp_network.cpds << std::endl;
-				}
-				//std::cout << "Age : " << age << std::endl;
+				});
 			}
 
-			ga.evolve();
 			for (int i = 0; i < peepos.size(); i++) { population[i].fitness = peepos[i].health;  }
+			ga.evolve();
 			ga.selected_offspring = population;
 			avg_fitnesses.push_back(ga.avg_fitness);
 
 			std::cout << "Avg Fitness: " << avg_fitnesses[gen] << std::endl;
 		}
 
-		Individual best_individual = ga.best_chromosome;
 		std::ofstream ofs("data/survival_network_evolved.json");
-		best_individual.pp_network.to_file(ofs);
-		std::cout << "Best fitness: " << best_individual.fitness << std::endl;
+		ga.best_chromosome.pp_network.to_file(ofs);
+		std::cout << "Best fitness: " << ga.best_chromosome.fitness << std::endl;
 	}
 
 	static void verification(const std::string& obstacles_path)
@@ -215,7 +213,7 @@ namespace Survival
 
 	int run()
 	{
-		generate_obstacles(400, "data/survival_obstacles.json");
+		//generate_obstacles(500, "data/survival_obstacles.json");
 
 		//evolution("data/survival_obstacles.json");
 		verification("data/survival_obstacles.json");

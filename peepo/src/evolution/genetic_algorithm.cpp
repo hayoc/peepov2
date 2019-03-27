@@ -21,9 +21,9 @@ Individual::Individual(PPNetwork& pp_network_, double fitness_, double mut_top_,
 
 Individual::Individual(const Individual& individual) :
 	pp_network(individual.pp_network),
-	fitness(0.0),
-	mut_top(0.0),
-	mut_cpd(0.0)
+	fitness(individual.fitness),
+	mut_top(individual.mut_top),
+	mut_cpd(individual.mut_cpd)
 {
 
 }
@@ -496,19 +496,16 @@ std::vector<Individual>& GeneticAlgorithm::first_generation(void)
 
 void GeneticAlgorithm::evolve(void)
 {
-	std::sort(selected_offspring.begin(), selected_offspring.end(), [](Individual a, Individual b) { return a.fitness > b.fitness; });
+	std::sort(selected_offspring.begin(), selected_offspring.end(), [](const Individual& a, const Individual& b) { return a.fitness > b.fitness; });
 	if (selected_offspring[0].fitness >= best_chromosome.fitness) 
 	{ 
 		best_chromosome = Individual{ selected_offspring[0] }; 
-		best_chromosome.fitness = selected_offspring[0].fitness;
 	}
 	
 	avg_fitness = 0.0;
-	for (int individual = 0; individual < selected_offspring. size(); individual++) {
-		
-		//std::cout << "individual fitness = " << selected_offspring[individual].fitness << std::endl;
-		avg_fitness += selected_offspring[individual].fitness; }
-	
+	for (int individual = 0; individual < selected_offspring. size(); individual++) {		
+		avg_fitness += selected_offspring[individual].fitness; 
+	}
 	avg_fitness /= selected_offspring.size();
 
 	// SELECTION
