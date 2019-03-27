@@ -213,7 +213,7 @@ namespace Survival
 
 	int run()
 	{
-		generate_obstacles(100, "data/survival_obstacles.json");
+		generate_obstacles(500, "data/survival_obstacles.json");
 
 		//evolution("data/survival_obstacles.json");
 		verification("data/survival_obstacles.json");

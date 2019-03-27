@@ -1,43 +1,216 @@
 {
+  "header": {
+    "identification": "",
+    "description": "",
+    "frozen": false,
+    "train_from": "",
+    "date": "2019-02-01 23:37:06.847463"
+  },
+  "nodes": {
+    "RON": [
+      {
+        "name": "dd5cac71",
+        "card": 2
+      },
+      {
+        "name": "2aa02ae8",
+        "card": 2
+      }
+    ],
+    "EXT": [
+      {
+        "name": "LEN_vision_1",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_2",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_3",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_4",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_5",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_6",
+        "card": 2
+      },
+      {
+        "name": "dummy",
+        "card": 2
+      }
+    ],
+    "PRO": [
+      {
+        "name": "LEN_motor_left",
+        "card": 2
+      },
+      {
+        "name": "LEN_motor_right",
+        "card": 2
+      }
+    ]
+  },
+  "edges": [
+    [
+      "dd5cac71",
+      "LEN_vision_1"
+    ],
+    [
+      "dd5cac71",
+      "LEN_vision_2"
+    ],
+    [
+      "dd5cac71",
+      "LEN_vision_4"
+    ],
+    [
+      "dd5cac71",
+      "LEN_vision_6"
+    ],
+    [
+      "dd5cac71",
+      "LEN_motor_left"
+    ],
+    [
+      "dd5cac71",
+      "LEN_motor_right"
+    ],
+    [
+      "2aa02ae8",
+      "LEN_vision_1"
+    ],
+    [
+      "2aa02ae8",
+      "LEN_vision_2"
+    ],
+    [
+      "2aa02ae8",
+      "LEN_vision_3"
+    ],
+    [
+      "2aa02ae8",
+      "LEN_vision_5"
+    ],
+    [
+      "2aa02ae8",
+      "LEN_motor_right"
+    ],
+    [
+      "dd5cac71",
+      "dummy"
+    ],
+    [
+      "2aa02ae8",
+      "dummy"
+    ]
+  ],
   "cpds": {
-    "LEN_motor_left": [
+    "dd5cac71": [
+      0.5,
+      0.5
+    ],
+    "2aa02ae8": [
+      0.5,
+      0.5
+    ],
+    "LEN_vision_1": [
       [
-        0.9,
-        0.1
+        0.7224048041556643,
+        0.6756994603515009,
+        0.42212087330013476,
+        0.08623875522104159
       ],
       [
-        0.1,
-        0.9
+        0.27759519584433573,
+        0.3243005396484991,
+        0.5778791266998652,
+        0.9137612447789584
+      ]
+    ],
+    "LEN_vision_2": [
+      [
+        0.14930909434998044,
+        0.8031353176771787,
+        0.8714950854415104,
+        0.3081217625288472
+      ],
+      [
+        0.8506909056500196,
+        0.19686468232282142,
+        0.12850491455848967,
+        0.6918782374711528
+      ]
+    ],
+    "LEN_vision_3": [
+      [
+        0.4140937434366441,
+        0.8269033805418319
+      ],
+      [
+        0.5859062565633559,
+        0.1730966194581681
+      ]
+    ],
+    "LEN_vision_4": [
+      [
+        0.6172901104905837,
+        0.45856837925305205
+      ],
+      [
+        0.38270988950941637,
+        0.541431620746948
+      ]
+    ],
+    "LEN_vision_5": [
+      [
+        0.2573433533113089,
+        0.11618804815157183
+      ],
+      [
+        0.7426566466886911,
+        0.8838119518484281
+      ]
+    ],
+    "LEN_vision_6": [
+      [
+        0.4615446021532679,
+        0.5211851154332137
+      ],
+      [
+        0.5384553978467321,
+        0.4788148845667864
+      ]
+    ],
+    "LEN_motor_left": [
+      [
+        0.8785904279259923,
+        0.4747746964497843
+      ],
+      [
+        0.12140957207400777,
+        0.5252253035502157
       ]
     ],
     "LEN_motor_right": [
       [
-        0.9,
-        0.1
+        0.15434927744613317,
+        0.8656596733597287,
+        0.6058660684149263,
+        0.09639148311084386
       ],
       [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_left": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_right": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
+        0.8456507225538668,
+        0.13434032664027137,
+        0.39413393158507376,
+        0.9036085168891562
       ]
     ],
     "dummy": [
@@ -53,81 +226,6 @@
         0.5,
         0.5
       ]
-    ],
-    "root_left": [
-      0.9,
-      0.1
-    ],
-    "root_right": [
-      0.9,
-      0.1
-    ]
-  },
-  "edges": [
-    [
-      "root_left",
-      "LEN_vision_left"
-    ],
-    [
-      "root_left",
-      "LEN_motor_left"
-    ],
-    [
-      "root_left",
-      "dummy"
-    ],
-    [
-      "root_right",
-      "LEN_vision_right"
-    ],
-    [
-      "root_right",
-      "LEN_motor_right"
-    ],
-    [
-      "root_right",
-      "dummy"
-    ]
-  ],
-  "header": {
-    "date": "2019-02-06 12:51:41.233943",
-    "description": "Network to avoid obstacles",
-    "identification": "Survival"
-  },
-  "nodes": {
-    "EXT": [
-      {
-        "card": 2,
-        "name": "LEN_vision_left"
-      },
-      {
-        "card": 2,
-        "name": "LEN_vision_right"
-      },
-      {
-        "card": 2,
-        "name": "dummy"
-      }
-    ],
-    "PRO": [
-      {
-        "card": 2,
-        "name": "LEN_motor_left"
-      },
-      {
-        "card": 2,
-        "name": "LEN_motor_right"
-      }
-    ],
-    "RON": [
-      {
-        "card": 2,
-        "name": "root_left"
-      },
-      {
-        "card": 2,
-        "name": "root_right"
-      }
     ]
   }
 }

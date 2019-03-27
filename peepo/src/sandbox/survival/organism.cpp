@@ -9,7 +9,7 @@ SurvivalPeepo::SurvivalPeepo(const std::string& name_, std::vector<double>& pos_
 	rotation(0.f),
 	health(1.0),
 	motor({ {LEFT, false}, {RIGHT, false} }),
-	view({ {LEFT, false}, {RIGHT, false} })
+	view({ {"1", false}, {"2", false}, {"3", false}, {"4", false}, {"5", false}, {"6", false} })
 {
 	
 	for (double angle = -30.0; angle < 30.0; angle += 10.0) {
@@ -142,16 +142,11 @@ void SurvivalPeepo::calculate_obstacles()
 			count++;
 		}
 	}
-	if ((relevant_sector.index == 4) || (relevant_sector.index == 5) || (relevant_sector.index == 6))
-	{
-		view[RIGHT] = true;
-	}
-	else if ((relevant_sector.index == 1) || (relevant_sector.index == 2) || (relevant_sector.index == 3))
-	{
-		view[LEFT] = true;
-	}
-	std::string only_true = std::to_string(relevant_sector.index);
 
+	std::string only_true = std::to_string(relevant_sector.index);
+	if (only_true != "0") {
+		view[only_true] = true;
+	}
 	double sight_angle = 0.0;
 	if (only_true == "0") { sight_angle = rotation; }
 	if (only_true == "1") { sight_angle = rotation - 25.0 / 180.0*PI; }
@@ -177,7 +172,7 @@ std::string SurvivalPeepo::get_direction(const std::string& name)
 std::string SurvivalPeepo::get_quadrant(const std::string& name)
 {
 	std::string quad = "0";
-	std::vector<std::string> quadrants = { LEFT, RIGHT };
+	std::vector<std::string> quadrants = { "1","2","3","4","5","6" };	
 	for (auto qd : quadrants)
 	{
 		if (name.find(qd) != std::string::npos) { quad = qd; break; }
