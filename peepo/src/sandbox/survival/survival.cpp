@@ -148,7 +148,7 @@ namespace Survival
 		std::string source = "data/survival_network.json";
 		unsigned max_age = 1000;
 		unsigned n_pop = 20;
-		unsigned n_gen = 20;
+		unsigned n_gen = 200;
 
 		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2 };
 		std::vector<Individual>& population = ga.first_generation();
@@ -213,7 +213,7 @@ namespace Survival
 
 	int run()
 	{
-		generate_obstacles(500, "data/survival_obstacles.json");
+		//generate_obstacles(500, "data/survival_obstacles.json");
 
 		//evolution("data/survival_obstacles.json");
 		verification("data/survival_obstacles.json");

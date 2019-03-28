@@ -1,93 +1,9 @@
 {
   "cpds": {
-    "LEN_motor_left": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_motor_right": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_left": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "LEN_vision_right": [
-      [
-        0.9,
-        0.1
-      ],
-      [
-        0.1,
-        0.9
-      ]
-    ],
-    "dummy": [
-      [
-        0.5,
-        0.5,
-        0.5,
-        0.5
-      ],
-      [
-        0.5,
-        0.5,
-        0.5,
-        0.5
-      ]
-    ],
-    "root_left": [
-      0.9,
-      0.1
-    ],
-    "root_right": [
-      0.9,
-      0.1
-    ]
+
   },
   "edges": [
-    [
-      "root_left",
-      "LEN_vision_left"
-    ],
-    [
-      "root_left",
-      "LEN_motor_left"
-    ],
-    [
-      "root_left",
-      "dummy"
-    ],
-    [
-      "root_right",
-      "LEN_vision_right"
-    ],
-    [
-      "root_right",
-      "LEN_motor_right"
-    ],
-    [
-      "root_right",
-      "dummy"
-    ]
+
   ],
   "header": {
     "date": "2019-02-06 12:51:41.233943",
@@ -95,38 +11,54 @@
     "identification": "Survival"
   },
   "nodes": {
+    "RON": [
+      {
+        "name": "ROOT_left",
+        "card": 2
+      },
+      {
+        "name": "ROOT_right",
+        "card": 2
+      }
+    ],
     "EXT": [
       {
-        "card": 2,
-        "name": "LEN_vision_left"
+        "name": "LEN_vision_1",
+        "card": 2
       },
       {
-        "card": 2,
-        "name": "LEN_vision_right"
+        "name": "LEN_vision_2",
+        "card": 2
       },
       {
-        "card": 2,
-        "name": "dummy"
+        "name": "LEN_vision_3",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_4",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_5",
+        "card": 2
+      },
+      {
+        "name": "LEN_vision_6",
+        "card": 2
+      },
+      {
+        "name": "dummy",
+        "card": 2
       }
     ],
     "PRO": [
       {
-        "card": 2,
-        "name": "LEN_motor_left"
+        "name": "LEN_motor_left",
+        "card": 2
       },
       {
-        "card": 2,
-        "name": "LEN_motor_right"
-      }
-    ],
-    "RON": [
-      {
-        "card": 2,
-        "name": "root_left"
-      },
-      {
-        "card": 2,
-        "name": "root_right"
+        "name": "LEN_motor_right",
+        "card": 2
       }
     ]
   }
