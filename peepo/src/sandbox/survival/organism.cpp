@@ -64,18 +64,10 @@ void SurvivalPeepo::update()
 	pos[1] += std::sin(rotation) * PEEPO_SPEED;
 	if (motor[LEFT]) {
 		rotation -= 2. / 180.*PI;
-		if (rotation < 0.0) {
-			rotation = 2.0*PI;//??  ??????
-		}
 	}
 	if (motor[RIGHT]) {
 		rotation += 2. / 180.*PI;
-		if (rotation > 2.0*PI) {
-			rotation = 0.0;
-		}
 	}
-
-	calculate_obstacles();
 
 	// Check collisions between the peepo and the screen
 	if (pos[0] - SIZE_PEEPO <= 0.)
@@ -103,6 +95,8 @@ void SurvivalPeepo::update()
 				   pos[1] + PEEPO_RADIUS * std::sin(rotation + 30.0 / 180.0*PI) };
 	edge_left = { pos[0] + PEEPO_RADIUS * std::cos(rotation - 30.0 / 180.0*PI),
 				   pos[1] + PEEPO_RADIUS * std::sin(rotation - 30.0 / 180.0*PI) };
+
+	calculate_obstacles();
 }
 
 void SurvivalPeepo::calculate_obstacles()
@@ -111,52 +105,51 @@ void SurvivalPeepo::calculate_obstacles()
 		view[vw.first] = false;
 	}
 
-	int to_remove = -1;
-	int count = 0;
-	double closest_distance = 10000.0;
-	relevant_sector.index = 0;
-	for (int index = 0; index < sectors.size(); index++) {
-		auto sector = sectors[index];
-		double lower_edge = sector[0];
-		double upper_edge = sector[1];
-		count = 0;
-		for (int i = obstacles.size() - 1; i >= 0; i--) {
-			Obstacle& obstacle = obstacles[i];
-			bool is_collision = collision(pos, { obstacle.x, obstacle.y },
-				rotation, lower_edge, upper_edge, PEEPO_RADIUS);
-			if (is_collision) {
-				double distance = sqrt(pow((obstacle.y - pos[1]), 2.) + pow((obstacle.x - pos[0]), 2.));
-				if (distance <= SIZE_PEEPO + SIZE_OBST) {
-					health++;
-					obstacles.erase(obstacles.begin() + i);
-					break;
-				}
-				if (distance > SIZE_PEEPO + SIZE_OBST && distance <= PEEPO_RADIUS) {
-					closest_distance = distance;
-					relevant_sector.index = index + 1;
-					relevant_sector.xy = { obstacle.x,obstacle.y };
-					relevant_sector.distance = closest_distance;
-					break;
+	closest_obstacle.distance = 10000.0;
+
+	double lower_edge = sectors[0][0];
+	double upper_edge = sectors[sectors.size() - 1][1];
+
+	for (int i = obstacles.size() - 1; i >= 0; i--)
+	{
+		Obstacle& obstacle = obstacles[i];
+		if (collision(pos, { obstacle.x, obstacle.y }, rotation, lower_edge, upper_edge, PEEPO_RADIUS))
+		{
+			double distance = sqrt(pow((obstacle.y - pos[1]), 2.) + pow((obstacle.x - pos[0]), 2.));
+
+			if (distance <= SIZE_PEEPO + SIZE_OBST)
+			{
+				health++;
+				obstacles.erase(obstacles.begin() + i);
+			}
+
+			if (distance > SIZE_PEEPO + SIZE_OBST && distance <= PEEPO_RADIUS)
+			{
+				if (distance <= closest_obstacle.distance)
+				{
+					closest_obstacle.distance = distance;
+					closest_obstacle.xy = { obstacle.x,obstacle.y };
 				}
 			}
-			count++;
 		}
 	}
 
-	std::string only_true = std::to_string(relevant_sector.index);
-	if (only_true != "0") {
-		view[only_true] = true;
+	if (closest_obstacle.distance < 10000.0)
+	{
+		for (int index = 0; index < sectors.size(); index++)
+		{
+			auto sector = sectors[index];
+			double lower_edge = sector[0];
+			double upper_edge = sector[1];
+
+			if (collision(pos, { closest_obstacle.xy[0], closest_obstacle.xy[1] }, rotation, lower_edge, upper_edge, PEEPO_RADIUS))
+			{
+				std::string target_sector = std::to_string(index + 1);
+				view[target_sector] = true;
+			}
+		}
+
 	}
-	double sight_angle = 0.0;
-	if (only_true == "0") { sight_angle = rotation; }
-	if (only_true == "1") { sight_angle = rotation - 25.0 / 180.0*PI; }
-	if (only_true == "2") { sight_angle = rotation - 15.0 / 180.0*PI; }
-	if (only_true == "3") { sight_angle = rotation - 5.0 / 180.0*PI; }
-	if (only_true == "4") { sight_angle = rotation + 5.0 / 180.0*PI; }
-	if (only_true == "5") { sight_angle = rotation + 15.0 / 180.0*PI; }
-	if (only_true == "6") { sight_angle = rotation + 25.0 / 180.0*PI; }
-	edge_middle = { pos[0] + relevant_sector.distance*std::cos(sight_angle),
-					pos[1] + relevant_sector.distance*std::sin(sight_angle) };
 }
 
 std::string SurvivalPeepo::get_direction(const std::string& name)

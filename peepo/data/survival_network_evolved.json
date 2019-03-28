@@ -1,1 +1,205 @@
-{"cpds":{"LEN_motor_left":[[0.796094223445114,0.8849112262789702],[0.20390577655488595,0.1150887737210297]],"LEN_motor_right":[[0.73649649296728,0.25742107607889186,0.4037787103400362,0.8996612727206514],[0.26350350703271996,0.7425789239211081,0.5962212896599638,0.10033872727934869]],"LEN_vision_1":[[0.5462658024278815,0.4617266995251348,0.6717599910615356,0.46174736618832946],[0.45373419757211847,0.5382733004748653,0.3282400089384644,0.5382526338116705]],"LEN_vision_2":[[0.8035738245147764,0.1234619792744248,0.6268267347620105,0.5186118546698725],[0.19642617548522356,0.8765380207255752,0.3731732652379896,0.4813881453301275]],"LEN_vision_3":[[0.5088115802801317,0.631991207949269,0.8452721644826846,0.5148421579047597],[0.4911884197198684,0.368008792050731,0.15472783551731542,0.4851578420952403]],"LEN_vision_4":[[0.6439295602322892,0.7728767591442726],[0.3560704397677108,0.22712324085572738]],"LEN_vision_5":[[0.6584967482298052,0.577947254753615],[0.34150325177019486,0.42205274524638503]],"LEN_vision_6":[[0.5198494373225222,0.6015454545792441,0.3589592944069494,0.43940526120508894],[0.4801505626774778,0.39845454542075587,0.6410407055930507,0.5605947387949111]],"ROOT_left":[0.31525913772907227,0.6847408622709278],"ROOT_right":[0.9999989723549749,1.0276450250520424e-06],"dummy":[[0.5417460916679187,0.5025558418980214],[0.4582539083320813,0.4974441581019787]]},"edges":[["ROOT_left","LEN_vision_1"],["ROOT_left","LEN_vision_2"],["ROOT_left","LEN_vision_3"],["ROOT_left","LEN_vision_5"],["ROOT_left","LEN_vision_6"],["ROOT_left","dummy"],["ROOT_left","LEN_motor_right"],["ROOT_right","LEN_vision_1"],["ROOT_right","LEN_vision_2"],["ROOT_right","LEN_vision_3"],["ROOT_right","LEN_vision_4"],["ROOT_right","LEN_vision_6"],["ROOT_right","LEN_motor_left"],["ROOT_right","LEN_motor_right"]],"header":{"date":"2019-02-06 12:51:41.233943","description":"Network to avoid obstacles","identification":"Survival"},"nodes":{"EXT":[{"card":2,"name":"LEN_vision_1"},{"card":2,"name":"LEN_vision_2"},{"card":2,"name":"LEN_vision_3"},{"card":2,"name":"LEN_vision_4"},{"card":2,"name":"LEN_vision_5"},{"card":2,"name":"LEN_vision_6"},{"card":2,"name":"dummy"}],"PRO":[{"card":2,"name":"LEN_motor_left"},{"card":2,"name":"LEN_motor_right"}],"RON":[{"card":2,"name":"ROOT_left"},{"card":2,"name":"ROOT_right"}]}}
+{
+  "cpds": {
+    "LEN_motor_left": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_motor_right": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_1": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_2": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_3": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_4": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_5": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "LEN_vision_6": [
+      [
+        0.9,
+        0.1
+      ],
+      [
+        0.1,
+        0.9
+      ]
+    ],
+    "ROOT_left": [
+      0.8,
+      0.2
+    ],
+    "ROOT_right": [
+      0.8,
+      0.2
+    ],
+    "dummy": [
+      [
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    ]
+  },
+  "edges": [
+    [
+      "ROOT_left",
+      "LEN_vision_1"
+    ],
+    [
+      "ROOT_left",
+      "LEN_vision_2"
+    ],
+    [
+      "ROOT_left",
+      "LEN_vision_3"
+    ],
+    [
+      "ROOT_right",
+      "LEN_vision_4"
+    ],
+    [
+      "ROOT_right",
+      "LEN_vision_5"
+    ],
+    [
+      "ROOT_right",
+      "LEN_vision_6"
+    ],
+    [
+      "ROOT_left",
+      "dummy"
+    ],
+    [
+      "ROOT_right",
+      "dummy"
+    ],
+    [
+      "ROOT_left",
+      "LEN_motor_left"
+    ],
+    [
+      "ROOT_right",
+      "LEN_motor_right"
+    ]
+  ],
+  "header": {
+    "date": "2019-02-06 12:51:41.233943",
+    "description": "Network to avoid obstacles",
+    "identification": "Survival"
+  },
+  "nodes": {
+    "EXT": [
+      {
+        "card": 2,
+        "name": "LEN_vision_1"
+      },
+      {
+        "card": 2,
+        "name": "LEN_vision_2"
+      },
+      {
+        "card": 2,
+        "name": "LEN_vision_3"
+      },
+      {
+        "card": 2,
+        "name": "LEN_vision_4"
+      },
+      {
+        "card": 2,
+        "name": "LEN_vision_5"
+      },
+      {
+        "card": 2,
+        "name": "LEN_vision_6"
+      },
+      {
+        "card": 2,
+        "name": "dummy"
+      }
+    ],
+    "PRO": [
+      {
+        "card": 2,
+        "name": "LEN_motor_left"
+      },
+      {
+        "card": 2,
+        "name": "LEN_motor_right"
+      }
+    ],
+    "RON": [
+      {
+        "card": 2,
+        "name": "ROOT_left"
+      },
+      {
+        "card": 2,
+        "name": "ROOT_right"
+      }
+    ]
+  }
+}

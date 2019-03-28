@@ -40,17 +40,34 @@ struct Obstacle
 	}
 };
 
+struct Ballz
+{
+	std::string id;
+	double x;
+	double y;
+	sf::CircleShape shape;
+
+	Ballz(std::string id, double x, double y) :
+		id(id), x(x), y(y)
+	{
+		shape.setRadius(SIZE_OBST - 3);
+		shape.setOutlineThickness(3);
+		shape.setOutlineColor(sf::Color::Black);
+		shape.setFillColor(sf::Color::Green);
+		shape.setOrigin(SIZE_OBST / 2, SIZE_OBST / 2);
+	}
+};
+
 class SurvivalPeepo : public Peepo
 {
 private:
-	struct RelevantSector 
+	struct ClosestObstacle 
 	{
-		int index;
 		std::vector<double> xy;
 		double distance;
 	};
 	
-	RelevantSector relevant_sector;
+	ClosestObstacle closest_obstacle;
 	std::vector<std::vector<double>> sectors;
 	
 public:

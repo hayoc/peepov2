@@ -43,6 +43,7 @@ namespace Survival
 			jzon[id]["x"] = double(std::rand() % WIN_SIZE);
 			jzon[id]["y"] = double(std::rand() % WIN_SIZE);
 		}
+
 		std::ofstream ofs(file_path);
 		std::string json_string{ jzon.dump() };
 		ofs << json_string;
@@ -61,7 +62,7 @@ namespace Survival
 
 		}
 
-		void world_loop(const unsigned& max_age, PPNetwork& pp_network, const std::string& obstacles_path)
+		void world_loop(PPNetwork& pp_network, const std::string& obstacles_path)
 		{
 			bool isPlaying = true;
 			std::vector<Obstacle> obstacles = read_obstacles(obstacles_path);
@@ -126,16 +127,14 @@ namespace Survival
 					};
 					window.draw(edge_left, 2, sf::Lines);
 
-					sf::Vertex edge_middle[] =
-					{
-						sf::Vertex(sf::Vector2f(pos[0], pos[1])),
-						sf::Vertex(sf::Vector2f(peepo.edge_middle[0], peepo.edge_middle[1]))
-					};
-					window.draw(edge_middle, 2, sf::Lines);
-
 					for (auto obst : obstacles) {
 						window.draw(obst.shape);
 					}
+
+					Ballz ballz("ballz", 590.0, 429.0);
+					ballz.shape.setPosition(ballz.x, ballz.y);
+					window.draw(ballz.shape);
+					
 				}
 				// Display things on screen
 				window.display();
@@ -143,13 +142,8 @@ namespace Survival
 		}
 	};
 
-	static void evolution(const std::string& obstacles_path)
+	static void evolution(const std::string& obstacles_path, const std::string& source, const std::string& output, unsigned max_age, unsigned n_pop, unsigned n_gen)
 	{
-		std::string source = "data/survival_network.json";
-		unsigned max_age = 1000;
-		unsigned n_pop = 20;
-		unsigned n_gen = 200;
-
 		GeneticAlgorithm ga{ source, n_pop, 0.2, 0.2 };
 		std::vector<Individual>& population = ga.first_generation();
 
@@ -189,34 +183,40 @@ namespace Survival
 			std::cout << "Avg Fitness: " << avg_fitnesses[gen] << std::endl;
 		}
 
-		std::ofstream ofs("data/survival_network_evolved.json");
+		std::ofstream ofs(output);
 		ga.best_chromosome.pp_network.to_file(ofs);
 		std::cout << "Best fitness: " << ga.best_chromosome.fitness << std::endl;
 	}
 
-	static void verification(const std::string& obstacles_path)
+	static void verification(const std::string& obstacles_path, const std::string& output)
 	{
 		PPNetwork pp_network;
-		std::ifstream ifs("data/survival_network_evolved.json");
+		std::ifstream ifs(output);
 		pp_network.from_file(ifs);
 
-		unsigned max_age = 2000;
 		// Create the window of the application
 		sf::RenderWindow window(sf::VideoMode(WIN_SIZE, WIN_SIZE, 32), "Survival",
 			sf::Style::Titlebar | sf::Style::Default);
 		window.setVerticalSyncEnabled(false);
 		World world(window);
-		world.world_loop(max_age, pp_network, obstacles_path);
+		world.world_loop(pp_network, obstacles_path);
 		std::cin.get();
 	}
 
 
 	int run()
 	{
-		//generate_obstacles(500, "data/survival_obstacles.json");
+		std::string source = "data/survival_network.json";
+		std::string output = "data/survival_network_evolved.json";
+		std::string obstacles = "data/survival_obstacles.json";
+		unsigned max_age = 1000;
+		unsigned n_pop = 10;
+		unsigned n_gen = 30;
 
-		//evolution("data/survival_obstacles.json");
-		verification("data/survival_obstacles.json");
+		//generate_obstacles(50, "data/survival_obstacles.json");
+
+		//evolution(obstacles, source, output, max_age, n_pop, n_gen);
+		verification(obstacles, output);
 		std::cout << "Done" << std::endl;
 		std::cin.get();
 		return 0;

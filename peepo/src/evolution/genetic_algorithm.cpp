@@ -276,7 +276,7 @@ bool is_in_edges(const std::vector<std::vector<std::string>>& edges, const std::
 
 void mutate_topology(PPNetwork& pp)
 {
-	if (std::rand() % 100 > 49)
+	if (std::rand() % 100 > 50)
 	{
 		add_edge(pp);
 	}
@@ -360,6 +360,8 @@ void remove_edge(PPNetwork& pp)
 		{
 			std::uniform_int_distribution<int> dist(0, children.size() - 1);
 			std::string child = children[dist(engine)];
+
+			if (pp.get_parents(child).size() <= 1) { add_edge(pp); }
 			
 			std::vector<std::string> edge{ parent, child };
 			pp.remove_edge(edge);
