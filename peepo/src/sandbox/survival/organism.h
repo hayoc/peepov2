@@ -20,7 +20,7 @@ const double SIZE_OBST = 5.f;
 const double SIZE_PEEPO = 5.f;
 const double PEEPO_RADIUS = 50.0;
 const double PI = 3.14159f;
-const double PEEPO_SPEED = 0.1f;
+const double PEEPO_SPEED = 0.2f;
 
 struct Obstacle
 {

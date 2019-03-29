@@ -276,7 +276,7 @@ bool is_in_edges(const std::vector<std::vector<std::string>>& edges, const std::
 
 void mutate_topology(PPNetwork& pp)
 {
-	if (std::rand() % 100 > 50)
+	if (std::rand() % 100 > 20)
 	{
 		add_edge(pp);
 	}

@@ -1,9 +1,9 @@
 {
   "cpds": {
-
+   
   },
   "edges": [
-
+    
   ],
   "header": {
     "date": "2019-02-06 12:51:41.233943",
@@ -11,54 +11,38 @@
     "identification": "Survival"
   },
   "nodes": {
-    "RON": [
-      {
-        "name": "ROOT_left",
-        "card": 2
-      },
-      {
-        "name": "ROOT_right",
-        "card": 2
-      }
-    ],
     "EXT": [
       {
-        "name": "LEN_vision_1",
-        "card": 2
+        "card": 2,
+        "name": "LEN_vision_1"
       },
       {
-        "name": "LEN_vision_2",
-        "card": 2
+        "card": 2,
+        "name": "LEN_vision_2"
       },
       {
-        "name": "LEN_vision_3",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_4",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_5",
-        "card": 2
-      },
-      {
-        "name": "LEN_vision_6",
-        "card": 2
-      },
-      {
-        "name": "dummy",
-        "card": 2
+        "card": 2,
+        "name": "dummy"
       }
     ],
     "PRO": [
       {
-        "name": "LEN_motor_left",
-        "card": 2
+        "card": 2,
+        "name": "LEN_motor_left"
       },
       {
-        "name": "LEN_motor_right",
-        "card": 2
+        "card": 2,
+        "name": "LEN_motor_right"
+      }
+    ],
+    "RON": [
+      {
+        "card": 2,
+        "name": "ROOT_1"
+      },
+      {
+        "card": 2,
+        "name": "ROOT_2"
       }
     ]
   }

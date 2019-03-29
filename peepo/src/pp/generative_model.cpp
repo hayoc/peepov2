@@ -85,9 +85,9 @@ void GenerativeModel::hypothesis_update(Peepo& peepo, const std::string& node_na
 		std::map<std::string, std::vector<double>> inference = peepo.pp_network.do_inference(evidence, inferred);
 		for (auto& entry : inference)
 		{
-			std::string oldname = entry.first;
-			std::vector<double> old = peepo.pp_network.get_cpd(oldname);
-			std::cout << "Hypo Update " << oldname << "  FROM [" << old[0] << ", " << old[1] << "] TO [" << entry.second[0] << ", " << entry.second[1] << "]" << std::endl;
+			//std::string oldname = entry.first;
+			//std::vector<double> old = peepo.pp_network.get_cpd(oldname);
+			//std::cout << "Hypo Update " << oldname << "  FROM [" << old[0] << ", " << old[1] << "] TO [" << entry.second[0] << ", " << entry.second[1] << "]" << std::endl;
 
 			//TODO: This only works for hypos with card 2
 			std::vector<double> hypo = entry.second;

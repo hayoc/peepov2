@@ -209,11 +209,11 @@ namespace Survival
 		std::string source = "data/survival_network.json";
 		std::string output = "data/survival_network_evolved.json";
 		std::string obstacles = "data/survival_obstacles.json";
-		unsigned max_age = 1000;
-		unsigned n_pop = 10;
+		unsigned max_age = 2000;
+		unsigned n_pop = 20;
 		unsigned n_gen = 30;
 
-		//generate_obstacles(50, "data/survival_obstacles.json");
+		generate_obstacles(1000, "data/survival_obstacles.json");
 
 		//evolution(obstacles, source, output, max_age, n_pop, n_gen);
 		verification(obstacles, output);
