@@ -69,7 +69,9 @@ std::vector<json> get_topologies(PPNetwork& peepo, unsigned npop)
 			topologies.insert(topologies.end(), topologies.begin(), topologies.end());//taking duplicates of already fount topologies
 		}
 	} //while loop
-	std::random_shuffle(topologies.begin(), topologies.end());
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(topologies.begin(), topologies.end(), g);
 	topologies.resize(npop - 1);
 	map = ones_matrix<unsigned>(leaf_nodes.size(), root_nodes.size());//adding a fully connected network
 	a["edges"] = adjency_to_edges(map, root_nodes, leaf_nodes);
@@ -533,7 +535,9 @@ void GeneticAlgorithm::select_parents(void)
 		}
 	}
 	
-	std::random_shuffle(pool.begin(), pool.end());
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(pool.begin(), pool.end(), g);
 	for (unsigned draw = 0; draw < NUMBER_OF_MATING_PARENTS; draw++) {
 		unsigned pool_index = std::rand() % (pool.size() - 1);
 		unsigned parent_index = pool[pool_index];
